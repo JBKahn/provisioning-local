@@ -136,3 +136,4 @@ wget -qO- https://github.com/BNOTIONS/horse.vim/raw/master/install.sh | sudo bas
 sudo apt-get install vlc
 sudo apt-get install shutter
 sudo apt-get install gcolor2
+sudo apt-get install silversearcher-ag
