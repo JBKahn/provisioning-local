@@ -58,6 +58,10 @@ dropbox start -i
     git clone git://git.code.sf.net/p/clevo-wmi/code ~/dev/clevo-wmi-code
     cd ~/dev/clevo-wmi-code
     make && sudo insmod ~/dev/clevo-wmi-code/clevo_wmi.ko
+    sudo cp ~/dev/clevo-wmi-code/clevo_wmi.ko /lib/modules/`uname -r`/kernel/drivers/platform/x86/
+    sudo depmod -a
+    # add `clevo_wmi` to /etc/modules
+
     # TODO: Copy keyboard file to home. keyboard-color.sh
     cd ~ && sudo chmod 755 keyboard-color.sh
 
