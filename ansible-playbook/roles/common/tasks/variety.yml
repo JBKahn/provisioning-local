@@ -1,0 +1,12 @@
+---
+- name: install variety - add ppa
+  apt_repository: repo='ppa:peterlevi/ppa' state=present update_cache=yes
+
+- name: install variety
+  apt: name=variety update_cache=yes
+
+- name: install variety - Make variety autostart
+  copy: src=variety.desktop dest=/home/{{ username }}/.config/autostart/variety.desktop mode=0755
+
+- name: install variety - Set variety config
+  copy: src=variety.conf dest=/home/{{ username }}/.config/variety/variety.conf mode=0755

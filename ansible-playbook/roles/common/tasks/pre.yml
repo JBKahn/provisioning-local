@@ -1,0 +1,3 @@
+---
+- name: Make sure that the setup directory exsists
+  action: file path=/home/{{ username }}/setup state=directory

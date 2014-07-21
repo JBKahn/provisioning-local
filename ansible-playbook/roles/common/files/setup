@@ -1,0 +1,139 @@
+# sublime text 3
+sudo add-apt-repository ppa:webupd8team/sublime-text-3 
+sudo apt-get update && sudo apt-get install sublime-text-installer
+
+# chromium
+sudo apt-get install chromium-browser
+
+# chrome stable
+wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
+sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+sudo apt-get update && sudo apt-get install google-chrome-stable
+
+# Numix
+sudo add-apt-repository ppa:numix/ppa
+sudo apt-get update && sudo apt-get install numix-icon-theme-circle
+sudo apt-get install gnome-tweak-tool
+gsettings set org.gnome.desktop.interface icon-theme Numix-Circle
+sudo apt-get install numix-gtk-theme
+gsettings set org.gnome.desktop.interface gtk-theme Numix
+
+# Plank
+sudo add-apt-repository ppa:ricotz/docky
+sudo apt-get update && sudo apt-get install plank
+
+sudo mkdir ~/.config/autostart
+echo """[Desktop Entry]
+Type=Application
+Exec=/usr/bin/plank
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_CA]=plank
+Name=plank
+Comment[en_CA]=dock
+Comment=dock
+""" >> ~/.config/autostart/plank.desktop
+# TODO: can't figure out how to close the laucher on the left, only gconf setting isn't valid anymore
+
+#keypass
+sudo apt-get install keypass2
+
+# dropbox
+sudo apt-key adv --keyserver pgp.mit.edu --recv-keys 5044912E
+sudo sh -c 'echo "deb http://linux.dropbox.com/ubuntu/ trusty main" >> /etc/apt/sources.list.d/dropbox.list'
+sudo apt-get update && sudo apt-get install dropbox
+dropbox start -i
+
+# laptop only
+    # Screen dimming
+    # TODO Automate
+    # sudo subl /etc/default/grub
+    # GRUB_CMDLINE_LINUX_DEFAULT="quiet splash" ---> GRUB_CMDLINE_LINUX_DEFAULT="quiet splash video.use_native_backlight=1"
+    # sudo update-grub
+
+    # keyboard colors
+    sudo apt-get install git build-essential linux-source
+    mkdir ~/dev
+    git clone git://git.code.sf.net/p/clevo-wmi/code ~/dev/clevo-wmi-code
+    cd ~/dev/clevo-wmi-code
+    make && sudo insmod ~/dev/clevo-wmi-code/clevo_wmi.ko
+    sudo cp ~/dev/clevo-wmi-code/clevo_wmi.ko /lib/modules/`uname -r`/kernel/drivers/platform/x86/
+    sudo depmod -a
+    # add `clevo_wmi` to /etc/modules
+
+    # TODO: Copy keyboard file to home. keyboard-color.sh
+    cd ~ && sudo chmod 755 keyboard-color.sh
+
+# variety wallpaper changer
+sudo add-apt-repository ppa:peterlevi/ppa
+sudo apt-get update && sudo apt-get install variety
+# start variety: /opt/extras.ubuntu.com/variety/bin/variety
+
+# source code pro font
+mkdir /tmp/adodefont
+cd /tmp/adodefont
+wget http://downloads.sourceforge.net/project/sourcecodepro.adobe/SourceCodePro_FontsOnly-1.017.zip
+unzip SourceCodePro_FontsOnly-1.017.zip
+mkdir -p ~/.fonts
+cp SourceCodePro_FontsOnly-1.017/OTF/*.otf ~/.fonts
+fc-cache -f -v
+cd ~
+gconftool-2 --set /apps/gnome-terminal/profiles/Default/font --type string "Source Code Pro Semi-Bold 12"
+gconftool-2 --set /apps/gnome-terminal/profiles/Default/use_system_font --type boolean false
+
+#base16
+git clone git@github.com:chriskempson/base16-gnome-terminal.git ~/dev/base16-gnome
+source ~/dev/base16-gnome/base16-monokai.dark.sh
+# no idea how to set it to the terminal default.
+gconftool-2 --set /apps/gnome-terminal/profiles/base-16-monokai-dark/font --type string "Source Code Pro Semi-Bold 12"
+gconftool-2 --set /apps/gnome-terminal/profiles/base-16-monokai-dark/use_system_font --type boolean false
+
+# work stuff
+# install vagrant from website for latest version
+# same with virtual box
+sudo apt-get install python-pip
+sudo apt-get install curl
+sudo apt-get install nodejs
+sudo apt-get install npm
+sudo pip install ansible
+sudo pip install virtualenvwrapper
+export WORKON_HOME=~/Envs
+mkdir -p $WORKON_HOME
+source /usr/local/bin/virtualenvwrapper.sh
+sudo apt-get install nfs-kernel-server nfs-common rpcbind
+# copy Wavevagrant.json
+sudo apt-get install tmux
+sudo pip install tmuxp
+# follow wave instructions
+
+#sch breeze
+git clone git://github.com/ndbroadbent/scm_breeze.git ~/dev/.scm_breeze
+~/dev/.scm_breeze/install.sh
+
+# cusotmizations
+# uncomment #force_color_prompt=yes in .bashrc
+# copy django bash completion and bash customizations
+
+# export WORKON_HOME=$HOME/.virtualenvs
+# export PROJECT_HOME=$HOME/virtualenvProject
+# source /usr/local/bin/virtualenvwrapper.sh
+
+# source $HOME/.django_bash_completion.sh
+# if [ -f ~/.bash_customizations ]; then
+#     . ~/.bash_customizations
+# fi
+
+# add to bash_profile:
+# export GITHUB_USERNAME="JBKahn"
+# export HIPCHAT_USERNAME=JBKahn
+
+#Vim
+sudo apt-get install vim
+wget -qO- https://github.com/BNOTIONS/horse.vim/raw/master/install.sh | sudo bash
+
+# Other
+sudo apt-get install vlc
+sudo apt-get install shutter
+sudo apt-get install gcolor2
+sudo apt-get install silversearcher-ag

@@ -1,0 +1,46 @@
+" Environment {
+
+    " Basics {
+        set nocompatible        " Must be first line
+        set background=dark     " Assume a dark background
+    " }
+
+    " Setup Bundle Support {
+        " The next three lines ensure that the ~/.vim/bundle/ system works
+        filetype off
+        set rtp+=~/.vim/bundle/vundle
+        call vundle#rc()
+    " }
+
+" }
+
+" Bundles {
+    " Deps
+        Bundle 'gmarik/vundle'
+        Bundle 'MarcWeber/vim-addon-mw-utils'
+        Bundle 'tomtom/tlib_vim'
+
+    " General
+        Bundle 'scrooloose/nerdtree'
+        Bundle 'altercation/vim-colors-solarized'
+        Bundle 'chriskempson/base16-vim'
+        Bundle 'tpope/vim-surround'
+        Bundle 'spf13/vim-autoclose'
+        Bundle 'kien/ctrlp.vim'
+        Bundle 'bling/vim-airline'
+        Bundle 'mbbill/undotree'
+        Bundle 'myusuf3/numbers.vim'
+        Bundle 'nathanaelkane/vim-indent-guides'
+        Bundle 'airblade/vim-gitgutter'
+        Bundle 'rking/ag.vim'
+
+    " Programming
+        Bundle 'tpope/vim-fugitive'
+        Bundle 'scrooloose/nerdcommenter'
+        Bundle 'scrooloose/syntastic.git'
+" }
+
+" General {
+    " set autowrite                  " automatically write a file when leaving a modified buffer
+    set shortmess+=filmnrxoOtT      " Abbrev. of messages (avoids 'hit enter')
+" }

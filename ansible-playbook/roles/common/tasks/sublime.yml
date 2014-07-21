@@ -1,0 +1,6 @@
+---
+- name: install sublime text - add sublime text ppa
+  apt_repository: repo='ppa:webupd8team/sublime-text-3' state=present update_cache=yes
+
+- name: install sublime text
+  apt: name=sublime-text-installer update_cache=yes

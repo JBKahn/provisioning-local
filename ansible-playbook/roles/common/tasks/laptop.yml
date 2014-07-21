@@ -1,0 +1,51 @@
+---
+- name: screen dimming - alter grub file
+  lineinfile: dest=/etc/default/grub regexp=^GRUB_CMDLINE_LINUX_DEFAULT= line=GRUB_CMDLINE_LINUX_DEFAULT="quiet splash video.use_native_backlight=1"
+  when: laptop == "true"
+
+- name: screen dimming - update grub
+  command: sudo update-grub
+  when: laptop == "true"
+
+- name: keyboard colors - requirements
+  apt: pkg=$item state=installed
+  with_items:
+    - git
+    - build-essential
+    - linux-source
+  when: laptop == "true"
+
+- name: keyboard colors - Make sure setup directory exists
+  action: file path=/home/{{ username }}/setup state=directory
+  when: laptop == "true"
+
+- name: keyboard colors - checkout clevo-wmi-code
+  git: repo=git://git.code.sf.net/p/clevo-wmi/code
+       dest=/home/{{ username }}/setup/clevo-wmi-code
+  when: laptop == "true"
+
+- name: keyboard colors - build clevo-wmi
+  command: make
+  args:
+    chdir: /home/{{ username }}/setup/clevo-wmi-code
+  when: laptop == "true"
+
+- name: keyboard colors - link clevo-wmi to kernel
+  command: sudo insmod /home/{{ username }}/setup/clevo-wmi-code/clevo_wmi.ko
+  when: laptop == "true"
+
+- name: keyboard colors - copy to kernel drivers
+  copy: src=/home/{{ username }}/setup/clevo-wmi-code/clevo_wmi.ko dest=/lib/modules/`uname -r`/kernel/drivers/platform/x86/
+  when: laptop == "true"
+
+- name: keyboard colors - handle dependencies
+  command: sudo depmod -a
+  when: laptop == "true"
+
+- name: keyboard colors- add to etc/modules
+  lineinfile: dest=/etc/modules line=clevo_wmi
+  when: laptop == "true"
+
+- name: keyboard colors - copy kbbl script
+  copy: src=keyboard-color.sh dest=/home/{{ username }}/keyboard-color.sh mode=0755
+  when: laptop == "true"
