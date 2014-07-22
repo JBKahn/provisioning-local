@@ -18,7 +18,9 @@
   command: fc-cache -f -v
 
 - name: install source-code-pro - set system font
+  sudo: false
   command: gconftool-2 --set /apps/gnome-terminal/profiles/Default/font --type string "Source Code Pro Semi-Bold 12"
 
 - name: install source-code-pro - dont use default system font in terminal
+  sudo: false
   command: gconftool-2 --set /apps/gnome-terminal/profiles/Default/use_system_font --type boolean false

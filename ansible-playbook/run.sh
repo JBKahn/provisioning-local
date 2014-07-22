@@ -1,1 +1,1 @@
-ansible-playbook setup.yml -i HOSTS --ask-sudo-pass
+ansible-playbook setup.yml -i HOSTS --ask-sudo-pass # --module-path ~/ansible/library
