@@ -1,0 +1,11 @@
+---
+- name: install shutter - gcolor2 - silversearcher-ag - vlc
+  apt: pkg="{{ item }}"  state=installed
+  with_items:
+    - shutter
+    - gcolor2
+    - silversearcher-ag
+    - vlc
+
+- name: install virtualenvwrapper
+  pip: name=virtualenvwrapper

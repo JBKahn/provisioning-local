@@ -6,6 +6,12 @@
   - include: plank.yml
   - include: keepass2.yml
   - include: laptop.yml
+    when: sager_laptop == true
   - include: variety.yml
   - include: font.yml
   - include: base16.yml
+  - include: work.yml
+  - include: scm_breeze.yml
+  - include: vim.yml
+  - include: other_requirements.yml
+  - include: bash_customizations.yml

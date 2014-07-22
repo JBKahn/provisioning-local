@@ -1,0 +1,7 @@
+---
+- name: install scm-breeze - checkout repo
+  git: repo=https://github.com/ndbroadbent/scm_breeze.git
+       dest=/home/{{ username }}/setup/scm_breeze
+
+- name: install scm-breeze - run script
+  command: /home/{{ username }}/setup/scm_breeze/install.sh
