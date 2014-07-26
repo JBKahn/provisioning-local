@@ -7,8 +7,9 @@ How To Install
 -------------------
 
 1. Install pip
-
-  ```bash sudo easy_install pip```
+  ```bash
+  sudo easy_install pip
+  ```
 
 2. Install Ubuntu packages
   ```bash
@@ -19,15 +20,15 @@ How To Install
   * [setup git](https://help.github.com/articles/set-up-git)
   * [setup ssh keys](https://help.github.com/articles/generating-ssh-keys)
 4.  Checkout this repo and cd into the directory
-
   ```bash
   git clone git@github.com:JBKahn/my-setup.git <dir>
   cd <dir>
   ```
 
 5. Pip install the requirements
-
-  ```bash sudo pip install -r requirements.txt```
+  ```bash
+  sudo pip install -r requirements.txt
+  ```
 
 6. Fill in the variables in the [variables file ](./roles/common/vars/main.yml)
 
@@ -40,4 +41,6 @@ How To Install
   | github_username | github username |
 7. Provision your local machine
 
-  ```bash ./run.sh```
+  ```bash
+  ./run.sh
+  ```
