@@ -18,3 +18,9 @@
 - name: run fixubuntu
   command: /home/{{ username }}/setup/fixubuntu.sh
   sudo: true
+
+- name: enable workspaces - two horizontal
+  command: gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ hsize 2
+
+- name: enable workspaces - two vertical
+  command: gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ vsize 2
