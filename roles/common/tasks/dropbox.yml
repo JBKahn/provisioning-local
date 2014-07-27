@@ -4,12 +4,9 @@
   sudo: yes
 
 - name: install dropbox - add to dropbox.list
-  lineinfile: dest=/etc/apt/sources.list.d/dropbox.list line="deb http://linux.dropbox.com/ubuntu/ trusty main"
+  lineinfile: dest=/etc/apt/sources.list.d/dropbox.list line="deb http://linux.dropbox.com/ubuntu/ trusty main" create=yes
   sudo: yes
 
 - name: install dropbox
   apt: name=dropbox update_cache=yes
   sudo: yes
-
-- name: install dropbox - start
-  command: dropbox start -i

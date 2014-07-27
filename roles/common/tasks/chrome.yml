@@ -14,5 +14,5 @@
   sudo: yes
 
 - name: install chrome stable
-  apt: name=google-chrome-stable update_cache=yes
+  apt: name=google-chrome-stable update_cache=yes force=yes
   sudo: yes
