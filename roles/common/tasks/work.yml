@@ -1,16 +1,22 @@
 ---
+- name: Make sure setup directory exists
+  action: file path=~/setup state=directory
+  sudo: yes
+
 - name: download vagrant .deb package
-  get_url: url={{ vagrant_url }} dest=/home/{{ username }}/setup/vagrant.deb mode=0755
+  get_url: url={{ vagrant_url }} dest=~/setup/vagrant.deb mode=0755
+  sudo: yes
 
 - name: install vagrant
-  apt: deb=/home/{{ username }}/setup/vagrant.deb
+  apt: deb=~/setup/vagrant.deb
   sudo: yes
 
 - name: download virtualbox .deb package
-  get_url: url={{ virtualbox_url }} dest=/home/{{ username }}/setup/virtualbox.deb mode=0755
+  get_url: url={{ virtualbox_url }} dest=~/setup/virtualbox.deb mode=0755
+  sudo: yes
 
 - name: install virtualbox
-  apt: deb=/home/{{ username }}/setup/virtualbox.deb
+  apt: deb=~/setup/virtualbox.deb
   sudo: yes
 
 - name: install wave dependencies
@@ -45,4 +51,4 @@
   sudo: yes
 
 - name: copy tmuxp config
-  copy: src=.tmux.conf dest=/home/{{ username }}/.tmux.conf mode=0755
+  copy: src=.tmux.conf dest=~/.tmux.conf mode=0755

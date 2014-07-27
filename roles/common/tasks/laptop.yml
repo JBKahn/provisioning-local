@@ -15,23 +15,26 @@
   sudo: yes
 
 - name: keyboard colors - Make sure setup directory exists
-  action: file path=/home/{{ username }}/setup state=directory
+  action: file path=~/setup state=directory
+  sudo: yes
 
 - name: keyboard colors - checkout clevo-wmi-code
   git: repo=git://git.code.sf.net/p/clevo-wmi/code
-       dest=/home/{{ username }}/setup/clevo-wmi-code
+       dest=~/setup/clevo-wmi-code
+  sudo: yes
 
 - name: keyboard colors - build clevo-wmi
   command: make
   args:
-    chdir: /home/{{ username }}/setup/clevo-wmi-code
+    chdir: ~/setup/clevo-wmi-code
+  sudo: yes
 
 - name: keyboard colors - link clevo-wmi to kernel
-  command: sudo insmod /home/{{ username }}/setup/clevo-wmi-code/clevo_wmi.ko
+  command: sudo insmod ~/setup/clevo-wmi-code/clevo_wmi.ko
   sudo: yes
 
 - name: keyboard colors - copy to kernel drivers
-  copy: src=/home/{{ username }}/setup/clevo-wmi-code/clevo_wmi.ko dest=/lib/modules/`uname -r`/kernel/drivers/platform/x86/
+  copy: src=~/setup/clevo-wmi-code/clevo_wmi.ko dest=/lib/modules/`uname -r`/kernel/drivers/platform/x86/
   sudo: yes
 
 - name: keyboard colors - handle dependencies
@@ -43,4 +46,4 @@
   sudo: yes
 
 - name: keyboard colors - copy kbbl script
-  copy: src=keyboard-color.sh dest=/home/{{ username }}/keyboard-color.sh mode=0755
+  copy: src=keyboard-color.sh dest=~/keyboard-color.sh mode=0755
