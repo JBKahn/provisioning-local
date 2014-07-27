@@ -7,7 +7,8 @@ sudo apt-get install git
 sudo apt-get install python-dev libxml2-dev libxslt-dev
 
 cd ~
-mkdir setup
+mkdir -p setup
+cd setup
 git clone https://github.com/JBKahn/provisioning-local.git
 cd provisioning-local
 
