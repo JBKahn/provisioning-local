@@ -16,3 +16,5 @@
   - include: other_requirements.yml
   - include: dropbox.yml
   - include: bash_customizations.yml
+  - include: bumblebee.yml
+    when: bumblebee == true
