@@ -10,3 +10,7 @@
 - name: install dropbox
   apt: name=dropbox update_cache=yes
   sudo: yes
+
+- name: install libappindicator1
+  apt: name=libappindicator1 update_cache=yes
+  sudo: yes
