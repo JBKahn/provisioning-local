@@ -4,3 +4,4 @@
 
 - name: Make sure git is installed
   apt: name=git update_cache=yes
+  sudo: yes

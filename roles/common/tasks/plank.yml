@@ -1,9 +1,11 @@
 ---
 - name: install plank - add plank ppa
   apt_repository: repo='ppa:ricotz/docky' state=present update_cache=yes
+  sudo: yes
 
 - name: install plank
   apt: name=plank update_cache=yes
+  sudo: yes
 
 - name: install plank - Make sure that the autostart directory exsists
   action: file path=/home/{{ username }}/.config/autostart state=directory
@@ -12,9 +14,7 @@
   copy: src=plank.desktop dest=/home/{{ username }}/.config/autostart/plank.desktop mode=0755
 
 - name: gnome-terminal launcher-hide-mode
-  sudo: false
   command: dconf write /org/compiz/profiles/unity/plugins/unityshell/launcher-hide-mode 1
 
 - name: install source-code-pro - dont use default system font in terminal
-  sudo: false
   command: gconftool-2 --set /apps/gnome-terminal/global/default_profile --type string "base-16-monokai-dark"

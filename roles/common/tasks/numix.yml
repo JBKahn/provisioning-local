@@ -1,15 +1,19 @@
 ---
 - name: install numix theme - add numix ppa
   apt_repository: repo='ppa:numix/ppa' state=present update_cache=yes
+  sudo: yes
 
 - name: install numix theme - install circle icon theme
   apt: name=numix-icon-theme-circle update_cache=yes
+  sudo: yes
 
 - name: install numix theme - install gtk theme
   apt: name=numix-gtk-theme update_cache=yes
+  sudo: yes
 
 - name: install numix theme - install gnome tweak tool
   apt: name=gnome-tweak-tool update_cache=yes
+  sudo: yes
 
 - name: install numix theme - set icons to circle
   command: gsettings set org.gnome.desktop.interface icon-theme Numix-Circle

@@ -6,6 +6,8 @@
     - gcolor2
     - silversearcher-ag
     - vlc
+  sudo: yes
 
 - name: install virtualenvwrapper
   pip: name=virtualenvwrapper
+  sudo: yes

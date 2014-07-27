@@ -15,6 +15,7 @@ How To Install
   ```bash
   sudo apt-get install aptitude
   sudo apt-get install git
+  sudo apt-get install python-dev libxml2-dev libxslt-dev
   ```
 3. Setup Git
   * [setup git](https://help.github.com/articles/set-up-git)
@@ -44,3 +45,10 @@ How To Install
   ```bash
   ./run.sh
   ```
+
+Relevant links: working out ruby issue
+--------------------------------------------------
+
+http://stackoverflow.com/questions/4464985/rails-3-ruby-1-9-2-does-it-need-usr-bin-ruby1-8
+https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-on-ubuntu-12-04-lts-precise-pangolin-with-rvm
+https://wiki.opscode.com/display/chef/Ohai+Installation+and+Use

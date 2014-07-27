@@ -1,6 +1,7 @@
 ---
 - name: horse vim - download vim
   apt: name=vim update_cache=yes
+  sudo: yes
 
 - name: horse vim - make sure bundle directory exists
   action: file path=/home/{{ username }}/.vim/bundle state=directory
@@ -18,6 +19,12 @@
 
 - name: horse vim - copy .vimrc.bundles file
   file: src=/home/{{ username }}/horse.vim/.vimrc.bundles dest=/home/{{ username }}/.vimrc.bundles mode=0755 state=link
+
+- name: horse vim - make sure vim colors directory exists
+  action: file path=/home/{{ username }}/.vim/colors state=directory
+
+- name: horse vim - copy color to config to avoid error
+  copy: src=base16-default.vim dest=/home/{{ username }}/.vim/colors/base16-default.vim mode=0755
 
 - name: horse vim - run bundle install
   command: vim +BundleInstall +qall

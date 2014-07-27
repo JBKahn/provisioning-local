@@ -1,6 +1,7 @@
 ---
 - name: install chromium browser
   apt: name=chromium-browser update_cache=yes
+  sudo: yes
 
 - name: install chrome stable - download linux_signing_key.pub
   get_url: url=https://dl-ssl.google.com/linux/linux_signing_key.pub dest=/home/{{ username }}/setup/linux_signing_key.pub mode=0440
@@ -9,7 +10,9 @@
   authorized_key: user={{ username }} key="{{ lookup('file', '/home/{{ username }}/setup/linux_signing_key.pub') }}"
 
 - name: install chrome stable - add to google.list
-  lineinfile: dest=/etc/apt/sources.list.d/google.list line="deb http://dl.google.com/linux/chrome/deb/ stable main"
+  lineinfile: dest=/etc/apt/sources.list.d/google.list line="deb http://dl.google.com/linux/chrome/deb/ stable main" create=yes
+  sudo: yes
 
 - name: install chrome stable
   apt: name=google-chrome-stable update_cache=yes
+  sudo: yes

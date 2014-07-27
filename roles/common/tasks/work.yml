@@ -4,12 +4,14 @@
 
 - name: install vagrant
   apt: deb=/home/{{ username }}/setup/vagrant.deb
+  sudo: yes
 
 - name: download virtualbox .deb package
   get_url: url={{ virtualbox_url }} dest=/home/{{ username }}/setup/virtualbox.deb mode=0755
 
 - name: install virtualbox
   apt: deb=/home/{{ username }}/setup/virtualbox.deb
+  sudo: yes
 
 - name: install wave dependencies
   apt: name="{{ item }}" state=installed update_cache=yes
@@ -21,13 +23,14 @@
     - nfs-common
     - rpcbind
     - tmux
+    - npm
+  sudo: yes
 
 - name: install global nodejs packages
   npm:
     name: "{{ item }}"
     state: present
     global: yes
-  sudo: yes
   with_items:
     - bower
     - coffee-script
@@ -35,9 +38,11 @@
     - less
     - jshint
     - coffee-jshint
+  sudo: yes
 
 - name: install tmuxp
   pip: name=tmuxp
+  sudo: yes
 
 - name: copy tmuxp config
   copy: src=.tmux.conf dest=/home/{{ username }}/.tmux.conf mode=0755
