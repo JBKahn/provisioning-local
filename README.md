@@ -3,8 +3,16 @@ Provisioning My PC
 
 A simple ansible script to set up my machine just the way I like it.
 
-How To Install
--------------------
+How To Install With One Command
+-------------------------------
+
+```bash
+wget -qO- https://github.com/JBKahn/provisioning-local/raw/master/run.sh | sudo bash
+```
+
+
+How To Install The Old Fashioned Way
+------------------------------------
 
 1. Install pip
   ```bash
@@ -43,11 +51,15 @@ How To Install
 7. Provision your local machine
 
   ```bash
-  ./run.sh
+  ansible-playbook setup.yml -i HOSTS --ask-sudo-pass
   ```
 
-Relevant links: working out ruby issue
---------------------------------------------------
+Possible Issues
+---------------
+
+1. /usr/bin/ohai does not exist (Haven't hit since early development)
+
+The fix was to remove old version of ruby, use rvm and then gem install ohai
 
 http://stackoverflow.com/questions/4464985/rails-3-ruby-1-9-2-does-it-need-usr-bin-ruby1-8
 https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-on-ubuntu-12-04-lts-precise-pangolin-with-rvm
