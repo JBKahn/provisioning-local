@@ -1,18 +1,18 @@
 ---
 - name: install source-code-pro - make temp dir
-  action: file path=/home/{{ username }}/setup/adobe_font state=directory
+  action: file path=~/setup/adobe_font state=directory
 
 - name: install source-code-pro - download font
-  get_url: url=http://downloads.sourceforge.net/project/sourcecodepro.adobe/SourceCodePro_FontsOnly-1.017.zip dest=/home/{{ username }}/setup/adobe_font/source_code_pro.zip mode=0755
+  get_url: url=http://downloads.sourceforge.net/project/sourcecodepro.adobe/SourceCodePro_FontsOnly-1.017.zip dest=~/setup/adobe_font/source_code_pro.zip mode=0755
 
 - name: install source-code-pro - unzip downloaded font
-  unarchive: src=/home/{{ username }}/setup/adobe_font/source_code_pro.zip dest=/home/{{ username }}/setup/adobe_font
+  unarchive: src=~/setup/adobe_font/source_code_pro.zip dest=~/setup/adobe_font
 
 - name: install source-code-pro - make fonts directory
-  action: file path=/home/{{ username }}/.fonts state=directory
+  action: file path=~/.fonts state=directory
 
 - name: install source-code-pro - copy fonts
-  copy: src=/home/{{ username }}/setup/adobe_font/SourceCodePro_FontsOnly-1.017/OTF/ dest=/home/{{ username }}/.fonts mode=0755
+  copy: src=~/setup/adobe_font/SourceCodePro_FontsOnly-1.017/OTF/ dest=~/.fonts mode=0755
 
 - name: install source-code-pro - font cache
   command: fc-cache -f -v

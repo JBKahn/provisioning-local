@@ -1,6 +1,6 @@
 ---
 - name: Make sure that the setup directory exsists
-  action: file path=/home/{{ username }}/setup state=directory
+  action: file path=~/setup state=directory
 
 - name: Make sure git is installed
   apt: name=git update_cache=yes

@@ -8,10 +8,10 @@
   sudo: yes
 
 - name: install variety - Make variety autostart
-  copy: src=variety.desktop dest=/home/{{ username }}/.config/autostart/variety.desktop mode=0755
+  copy: src=variety.desktop dest=~/.config/autostart/variety.desktop mode=0755
 
 - name: horse vim - make sure the varienty config directory exists
-  action: file path=/home/{{ username }}/.config/variety state=directory
+  action: file path=~/.config/variety state=directory
 
 - name: install variety - Set variety config
-  copy: src=variety.conf dest=/home/{{ username }}/.config/variety/variety.conf mode=0755
+  copy: src=variety.conf dest=~/.config/variety/variety.conf mode=0755
