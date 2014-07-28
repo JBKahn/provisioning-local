@@ -16,6 +16,7 @@ How To Install The Old Fashioned Way
 
 1. Install pip
   ```bash
+  sudo apt-get install python-setuptools
   sudo easy_install pip
   ```
 
