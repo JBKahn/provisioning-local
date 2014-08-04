@@ -13,6 +13,7 @@
 - name: horse vim - checkout repo
   git: repo=https://github.com/JBKahn/horse.vim.git
        dest=/home/{{ username }}/horse.vim
+  sudo: yes
 
 - name: horse vim - copy .vimrc file
   file: src=/home/{{ username }}/horse.vim/.vimrc dest=/home/{{ username }}/.vimrc mode=0755 state=link
@@ -21,10 +22,26 @@
   file: src=/home/{{ username }}/horse.vim/.vimrc.bundles dest=/home/{{ username }}/.vimrc.bundles mode=0755 state=link
 
 - name: horse vim - make sure vim colors directory exists
-  action: file path=/home/{{ username }}/.vim/colors state=directory
+  file: path=/home/{{ username }}/.vim/colors state=directory mode=755
+  sudo: yes
 
 - name: horse vim - copy color to config to avoid error
   copy: src=base16-default.vim dest=/home/{{ username }}/.vim/colors/base16-default.vim mode=0755
+  sudo: yes
 
 - name: horse vim - run bundle install
   command: vim +BundleInstall +qall
+
+- name: horse vim - add NeoVim ppa
+  apt_repository: repo='ppa:rudenko/neovim' state=present update_cache=yes
+  sudo: yes
+
+- name: horse vim - install neovim
+  apt: name=neovim update_cache=yes
+  sudo: yes
+
+- name: horse vim - symlink nvimrc
+  file: src=/home/{{ username }}/horse.vim/.vimrc dest=/home/{{ username }}/.nvimrc mode=0755 state=link
+
+- name: horse vim - symlink nvim
+  file: src=/home/{{ username }}/.vim dest=/home/{{ username }}/.nvim mode=0755 state=link
