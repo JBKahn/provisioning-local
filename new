@@ -1,7 +1,0 @@
-start plank/variety
-
-http://stackoverflow.com/questions/4464985/rails-3-ruby-1-9-2-does-it-need-usr-bin-ruby1-8
-https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-on-ubuntu-12-04-lts-precise-pangolin-with-rvm
-https://wiki.opscode.com/display/chef/Ohai+Installation+and+Use
-
-sudo apt-get install python-dev libxml2-dev libxslt-dev
