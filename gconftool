@@ -10,19 +10,17 @@ from ansible.module_utils.basic import *
 def _escape_single_quotes(string):
     return re.sub("'", r"'\''", string)
 
-def _set_value(user, key, value, type):
-
-    command = " ".join([
-        '/usr/bin/gconftool-2 --set {} --type {} {}'.format(_escape_single_quotes(key), type, value),
-    ])
+def _set_value(user, key, value, argument_type):
 
     return subprocess.check_output([
-        'su', '-', user , '-c', command
+        'su', '-', user , '-c', " ".join([ '/usr/bin/gconftool-2 --set --type {} {} {}'.format(argument_type, _escape_single_quotes(key), value)])
     ]).strip()
 
 def _get_value(user, key):
 
-    return subprocess.check_output(['su', '-',  user , '-c', '/usr/bin/gconftool-2 --get {}'.format(_escape_single_quotes(key))]).strip()
+    return subprocess.check_output([
+        'su', '-',  user , '-c', '/usr/bin/gconftool-2 --get {}'.format(_escape_single_quotes(key))
+    ]).strip()
 
 def main():
 
@@ -40,7 +38,7 @@ def main():
     params = module.params
     state = module.params['state']
     user = module.params['user']
-    type = module.params['type']
+    argument_type = module.params['type']
     key = module.params['key']
     value = module.params['value']
 
@@ -48,7 +46,7 @@ def main():
     changed = old_value != value
 
     if changed and not module.check_mode:
-        _set_value(user, key, value, type)
+        _set_value(user, key, value, argument_type)
 
     print json.dumps({
         'changed': changed,
