@@ -15,6 +15,3 @@
 
 - name: gnome-terminal launcher-hide-mode
   command: dconf write /org/compiz/profiles/unity/plugins/unityshell/launcher-hide-mode 1
-
-- name: install source-code-pro - dont use default system font in terminal
-  command: gconftool-2 --set /apps/gnome-terminal/global/default_profile --type string "base-16-monokai-dark"
