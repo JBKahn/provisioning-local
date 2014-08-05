@@ -70,7 +70,7 @@ def main():
 
     module = AnsibleModule(
         argument_spec = {
-            'type': { 'choices': ['string', 'bool'], 'required': True },
+            'type': { 'choices': ['string', 'bool', 'integer'], 'required': True },
             'key': { 'required': True },
             'value': { 'required': True },
         },
@@ -96,6 +96,9 @@ def main():
             old_value = 'true'
         elif old_value in ['0', 'false', 0]:
             old_value = 'false'
+    elif argument_type == 'integer':
+        # try to convert to integer and fail if it's not valid.
+        pass
 
     changed = old_value != value
 
