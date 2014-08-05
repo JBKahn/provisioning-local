@@ -1,27 +1,76 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# (c) 2014, Joseph Kahn <josephbkahn@gmail.com>
+#
+# This file is part of Ansible
+#
+# Ansible is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Ansible is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
 
 from ansible.module_utils.basic import *
 
-def _escape_single_quotes(string):
-    return re.sub("'", r"'\''", string)
+DOCUMENTATION = '''
+---
+module: flowdock
+version_added: "1.6.10"
+author: Joseph Kahn
+short_description: alter gconftool-2 controlled settings.
+description:
+   - Set the value of a gconftool-2 controlled setting using a key, value and value type.
+options:
+  type:
+    description:
+      - Whether the value is of type 'string' or 'bool'
+    required: true
+    choices: [ "string", "bool" ]
+  key:
+    description:
+      - The key of the setting you wish to change.
+    required: true
+  value:
+    description:
+      - The value of the setting you wish to assign.
+    required: true
+'''
+
+EXAMPLES = '''
+# Set string value
+- gconftool-2: key=/apps/gnome-terminal/global/default_profile value=base-16-monokai-dark
+
+# Set bool value
+- gconftool-2: key=/apps/gnome-terminal/profiles/base-16-monokai-dark/use_system_font value=false type=bool
+'''
+
+# ===========================================
+# Module code.
+#
 
 def _set_value(module, key, value, argument_type):
-
-    return module.run_command(" ".join([ '/usr/bin/gconftool-2 --set --type {} {} "{}"'.format(argument_type, _escape_single_quotes(key), value)]))
+    ''' Set value of setting, under `key`, using gconftool-2 to `value` of type `argument_type`'''
+    return module.run_command(" ".join([ '/usr/bin/gconftool-2 --set --type {} {} "{}"'.format(argument_type, key, value)]))
 
 def _get_value(module, key):
-
-    return module.run_command('gconftool-2 --get {}'.format(_escape_single_quotes(key)))[1].strip()
-
+    ''' Return value of setting, under `key`, from gconftool-2'''
+    return module.run_command('gconftool-2 --get {}'.format(key))[1].strip()
 
 def main():
 
     module = AnsibleModule(
         argument_spec = {
-            'state': { 'choices': ['present'], 'default': 'present' },
-            'type': { 'choices': ['string', 'bool'], 'default': 'string' },
+            'type': { 'choices': ['string', 'bool'], 'required': True },
             'key': { 'required': True },
             'value': { 'required': True },
         },
@@ -29,12 +78,25 @@ def main():
     )
 
     params = module.params
-    state = module.params['state']
     argument_type = module.params['type']
     key = module.params['key']
     value = module.params['value']
 
     old_value = _get_value(module, key)
+
+    if argument_type == 'bool':
+        if value in ['1', 'true', 1]:
+            value = 'true'
+        elif value in ['0', 'false', 0]:
+            value = 'false'
+        else:
+            module.fail_json(msg="type is `bool` and value is not a boolean")
+
+        if old_value in ['1', 'true', 1]:
+            old_value = 'true'
+        elif old_value in ['0', 'false', 0]:
+            old_value = 'false'
+
     changed = old_value != value
 
     if changed and not module.check_mode:
