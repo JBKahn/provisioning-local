@@ -10,14 +10,10 @@
   command: /home/{{ username }}/setup/base16-gnome/base16-monokai.dark.sh
 
 - name: base16 - set system font to source code pro
-  gconftool: user=joseph key=/apps/gnome-terminal/profiles/base-16-monokai-dark/font value="Source Code Pro Semi-Bold 12"
-  sudo: yes
+  gconftool: key=/apps/gnome-terminal/profiles/base-16-monokai-dark/font value="Source Code Pro Semi-Bold 12"
 
-# for some reason the boolean setting isn't working with my module
-# i.e. call(['su', '-', 'joseph', '-c', '/usr/bin/gconftool-2 --set /apps/gnome-terminal/profiles/base-16-monokai-dark/use_system_font --type boolean false']) isn't working for me for some reason.
 - name: base16 - dont use default system font in terminal
-  command: gconftool-2 --set /apps/gnome-terminal/profiles/base-16-monokai-dark/use_system_font --type boolean false
+  gconftool: key=/apps/gnome-terminal/profiles/base-16-monokai-dark/use_system_font value=false type=bool
 
 - name: base16 - set default terminal profile
-  gconftool: user=joseph key=/apps/gnome-terminal/global/default_profile value=base-16-monokai-dark
-  sudo: yes
+  gconftool: key=/apps/gnome-terminal/global/default_profile value=base-16-monokai-dark

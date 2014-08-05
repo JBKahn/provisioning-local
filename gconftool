@@ -1,34 +1,27 @@
 #!/usr/bin/python
 
-import json
 import re
-import subprocess
-from subprocess import call
 
 from ansible.module_utils.basic import *
 
 def _escape_single_quotes(string):
     return re.sub("'", r"'\''", string)
 
-def _set_value(user, key, value, argument_type):
+def _set_value(module, key, value, argument_type):
 
-    return subprocess.check_output([
-        'su', '-', user , '-c', " ".join([ '/usr/bin/gconftool-2 --set --type {} {} {}'.format(argument_type, _escape_single_quotes(key), value)])
-    ]).strip()
+    return module.run_command(" ".join([ '/usr/bin/gconftool-2 --set --type {} {} "{}"'.format(argument_type, _escape_single_quotes(key), value)]))
 
-def _get_value(user, key):
+def _get_value(module, key):
 
-    return subprocess.check_output([
-        'su', '-',  user , '-c', '/usr/bin/gconftool-2 --get {}'.format(_escape_single_quotes(key))
-    ]).strip()
+    return module.run_command('gconftool-2 --get {}'.format(_escape_single_quotes(key)))[1].strip()
+
 
 def main():
 
     module = AnsibleModule(
         argument_spec = {
             'state': { 'choices': ['present'], 'default': 'present' },
-            'type': { 'choices': ['string', 'boolean'], 'default': 'string' },
-            'user': { 'required': True },
+            'type': { 'choices': ['string', 'bool'], 'default': 'string' },
             'key': { 'required': True },
             'value': { 'required': True },
         },
@@ -37,22 +30,16 @@ def main():
 
     params = module.params
     state = module.params['state']
-    user = module.params['user']
     argument_type = module.params['type']
     key = module.params['key']
     value = module.params['value']
 
-    old_value = _get_value(user, key)
+    old_value = _get_value(module, key)
     changed = old_value != value
 
     if changed and not module.check_mode:
-        _set_value(user, key, value, argument_type)
+        _set_value(module, key, value, argument_type)
 
-    print json.dumps({
-        'changed': changed,
-        'key': key,
-        'value': value,
-        'old_value': old_value,
-    })
+    module.exit_json(changed=changed, key=key, type=argument_type, value=value, old_value=old_value)
 
 main()
