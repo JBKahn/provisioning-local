@@ -20,7 +20,11 @@ sudo sed -i "s/^username: .*/username: $PROVISIONING_USER/" roles/common/vars/ma
 echo -e "please enter your github username, followed by [ENTER]" && read PROVISIONING_GITHUB_USERNAME
 sudo sed -i "s/^github_username: .*/github_username: $PROVISIONING_GITHUB_USERNAME/" roles/common/vars/main.yml
 
-ansible-playbook setup.yml -i HOSTS --ask-sudo-pass # --module-path ~/ansible/library
+mkdir -p ~/ansible
+mkdir -p ~/ansible/library
+cp ./gconftool ~/ansible/library/gconftool
+
+ansible-playbook setup.yml -i HOSTS --ask-sudo-pass  --module-path ~/ansible/library
 
 # currently unable to use ansible due to EULA that I can't seem to stub using debconf
 sudo apt-get install steam
