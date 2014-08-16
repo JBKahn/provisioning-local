@@ -10,10 +10,10 @@
   command: /home/{{ username }}/setup/base16-gnome/base16-monokai.dark.sh
 
 - name: base16 - set system font to source code pro
-  gconftool: key=/apps/gnome-terminal/profiles/base-16-monokai-dark/font value="Source Code Pro Semi-Bold 12"
+  gconftool-2: key=/apps/gnome-terminal/profiles/base-16-monokai-dark/font string="Source Code Pro Semi-Bold 12"
 
 - name: base16 - dont use default system font in terminal
-  gconftool: key=/apps/gnome-terminal/profiles/base-16-monokai-dark/use_system_font value=false type=bool
+  gconftool-2: key=/apps/gnome-terminal/profiles/base-16-monokai-dark/use_system_font bool=false
 
 - name: base16 - set default terminal profile
-  gconftool: key=/apps/gnome-terminal/global/default_profile value=base-16-monokai-dark
+  gconftool-2: key=/apps/gnome-terminal/global/default_profile string=base-16-monokai-dark
