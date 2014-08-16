@@ -26,7 +26,7 @@
   sudo: yes
 
 - name: horse vim - copy color to config to avoid error
-  copy: src=base16-default.vim dest=/home/{{ username }}/.vim/colors/base16-default.vim mode=0755
+  copy: src=base16-monokai.vim dest=/home/{{ username }}/.vim/colors/base16-monokai.vim mode=0755
   sudo: yes
 
 - name: horse vim - run bundle install
