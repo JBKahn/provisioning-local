@@ -18,22 +18,27 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 
+from ansible.constants import mk_boolean
 from ansible.module_utils.basic import *
 
 DOCUMENTATION = '''
 ---
 module: gconftool-2
-version_added: "post 1.6.10"
+version_added: "post 1.7.1"
 author: Joseph Kahn
 short_description: alter gconftool-2 controlled settings.
 description:
    - Set the value of a gconftool-2 controlled setting using a key and a string, an integer or a boolean.
 options:
+  key:
+    description:
+      - The key of the gconftool-2 setting to change.
+    required: true
   bool:
     description:
       - The boolean value to set the key to.
     required: false
-  integer:
+  int:
     description:
       - The integer value to set the key to.
     required: false
@@ -41,9 +46,29 @@ options:
     description:
       - The string value to set the key to.
     required: false
-  key:
+  float:
     description:
-      - The key of the setting you wish to change.
+      - The float value to set the key to.
+    required: false
+  list:
+    description:
+      - The list of values to set the key to.
+    required: false
+  list-type:
+    description:
+      - The type of the list of values.
+    required: false
+  pair:
+    description:
+      - The pair of values to set the key to.
+    required: false
+  paid-car-type:
+    description:
+      - The type of the first value in the pair.
+    required: false
+  pair-cdr-type:
+    description:
+      - The type of the second value in the pair.
     required: true
 '''
 
@@ -53,6 +78,9 @@ EXAMPLES = '''
 
 # Set bool value
 - gconftool-2: key=/apps/gnome-terminal/profiles/base-16-monokai-dark/use_system_font bool=false
+
+# Set pair value
+- gconftool-2: key=/path/to/something pair-car-type=int pair-cdr-type=string pair=1,'Joseph Kahn'
 '''
 
 # ===========================================
@@ -60,9 +88,9 @@ EXAMPLES = '''
 #
 
 
-def _set_value(module, key, value, argument_type):
+def _set_value(module, key, value, argument_type, additional_args):
     ''' Set value of setting, under `key`, using gconftool-2 to `value` of type `argument_type`'''
-    return module.run_command(" ".join(['/usr/bin/gconftool-2 --set --type {} {} "{}"'.format(argument_type, key, value)]))
+    return module.run_command(" ".join(['/usr/bin/gconftool-2 --set --type {} {} "{}" {}'.format(argument_type, key, value, additional_args)]))
 
 
 def _get_value(module, key):
@@ -76,50 +104,104 @@ def main():
         argument_spec={
             'key': {'required': True},
             'bool': {'type': 'bool'},
-            'integer': {'type': 'int'},
-            'string': {'type' 'string'},
+            'int': {'type': 'int'},
+            'string': {'type': 'str'},
+            'float': {'type': 'float'},
+            'list': {'type': 'list'},
+            'pair': {'type': 'list'},
+            'pair-cdr-type': {'choices': ['int', 'bool', 'float', 'string']},
+            'pair-car-type': {'choices': ['int', 'bool', 'float', 'string']},
+            'list-type': {'choices': ['int', 'bool', 'float', 'string']}
         },
-        mutually_exclusive=[['bool', 'string', 'integer']],
-        required_one_of=[['bool', 'string', 'integer']],
-        supports_check_mode=True,
+        mutually_exclusive=[
+            ['bool', 'string', 'int', 'float', 'list', 'pair'],
+            ['bool', 'string', 'int', 'float', 'list-type', 'pair'],
+            ['bool', 'string', 'int', 'float', 'list', 'pair-car-type'],
+            ['bool', 'string', 'int', 'float', 'list', 'pair-cdr-type']
+        ],
+        required_one_of=[['bool', 'string', 'int', 'float', 'list', 'pair']],
+        required_together=[
+            ['pair', 'pair-car-type', 'pair-cdr-type'],
+            ['list', 'list-type']
+        ],
+        supports_check_mode=True
     )
 
-    key = module.params.get('key')
-    boolean_value = module.params.get('bool')
-    string_value = module.params.get('string')
-    integer_value = module.params.get('integer')
+    key = module.params['key']
+    boolean_value = module.params['bool']
+    string_value = module.params['string']
+    integer_value = module.params['int']
+    float_value = module.params['float']
+    list_value = module.params['list']
+    pair_value = module.params['pair']
 
     old_value = _get_value(module, key)
 
+    additional_args = ''
+    instance_type_mapping = {'int': int, 'string': str, 'float': float, 'bool': mk_boolean}
     if boolean_value is not None:
         argument_type = 'bool'
-        if value in BOOLEANS_TRUE:
-            value = 'true'
-        elif value in BOOLEANS_FALSE:
-            value = 'false'
-        else:
-            module.fail_json(msg="`bool` is not a boolean value")
-
-        if old_value in BOOLEANS_TRUE:
-            old_value = 'true'
-        elif old_value in BOOLEANS_FALSE:
-            old_value = 'false'
+        value = str(mk_boolean(boolean_value)).lower()
+        old_value = str(mk_boolean(old_value)).lower()
     elif integer_value is not None:
         argument_type = 'integer'
-        try:
-            value = int(integer_value)
-        except Exception:
-            module.fail_json(msg="`integer` is not an intger value")
-        pass
-    else:
+        value = int(integer_value)
+    elif string_value is not None:
         argument_type = 'string'
         value = string_value
+    elif float_value is not None:
+        argument_type = 'float'
+        value = float_value
+    elif list_value is not None:
+        argument_type = 'list'
+        try:
+            for item in list_value:
+                if module.params['list-type'] == 'bool':
+                    module.boolean(item)
+                elif not str(instance_type_mapping.get(module.params['list-type'])(item)) == item:
+                    raise ValueError
+        except ValueError:
+            module.fail_json(msg='list type `{}` does not match the type of the contents.'.format(module.params['list-type']))
+        additional_args = '--list-type={}'.format(module.params['list-type'])
+        if module.params['list-type'] == 'bool':
+            list_value = [str(mk_boolean(item)).lower() for item in list_value]
+        value = '[{}]'.format(','.join(list_value))
+    elif pair_value is not None:
+        if len(pair_value) != 2:
+            module.fail_json(msg='A pair must be a list of length 2, {} items found.'.format(len(pair_value)))
+        argument_type = 'pair'
+        try:
+            car_value = pair_value[0]
+            car_type = module.params['pair-car-type']
+            if car_type == 'bool':
+                module.boolean(car_value)
+                car_value = mk_boolean(car_value)
+            elif not str(instance_type_mapping.get(car_type)(car_value)) == car_value:
+                raise ValueError
+
+            cdr_value = pair_value[1]
+            cdr_type = module.params['pair-cdr-type']
+            if cdr_type == 'bool':
+                module.boolean(cdr_value)
+                cdr_value = mk_boolean(cdr_value)
+            elif not str(instance_type_mapping.get(cdr_type)(cdr_value)) == cdr_value:
+                raise ValueError
+        except ValueError:
+            module.fail_json(msg='pair type `{}` or `{}` does not match the type of the contents.'.format(module.params['pair-car-type'], module.params['pair-cdr-type']))
+        additional_args = '--car-type={} --cdr-type={}'.format(car_type, cdr_type)
+        value = '({},{})'.format(car_value, cdr_value)
 
     changed = old_value != value
 
     if changed and not module.check_mode:
-        _set_value(module, key, value, argument_type)
+        _set_value(module, key, value, argument_type, additional_args)
 
-    module.exit_json(changed=changed, key=key, type=argument_type, value=value, old_value=old_value)
+    module.exit_json(
+        changed=changed,
+        key=key,
+        type=argument_type,
+        value=value,
+        old_value=old_value
+    )
 
 main()
