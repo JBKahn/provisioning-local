@@ -18,87 +18,102 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 
-import re
-
 from ansible.module_utils.basic import *
 
 DOCUMENTATION = '''
 ---
-module: flowdock
-version_added: "1.6.10"
+module: gconftool-2
+version_added: "post 1.6.10"
 author: Joseph Kahn
 short_description: alter gconftool-2 controlled settings.
 description:
-   - Set the value of a gconftool-2 controlled setting using a key, value and value type.
+   - Set the value of a gconftool-2 controlled setting using a key and a string, an integer or a boolean.
 options:
-  type:
+  bool:
     description:
-      - Whether the value is of type 'string' or 'bool'
-    required: true
-    choices: [ "string", "bool" ]
+      - The boolean value to set the key to.
+    required: false
+  integer:
+    description:
+      - The integer value to set the key to.
+    required: false
+  string:
+    description:
+      - The string value to set the key to.
+    required: false
   key:
     description:
       - The key of the setting you wish to change.
-    required: true
-  value:
-    description:
-      - The value of the setting you wish to assign.
     required: true
 '''
 
 EXAMPLES = '''
 # Set string value
-- gconftool-2: key=/apps/gnome-terminal/global/default_profile value=base-16-monokai-dark
+- gconftool-2: key=/apps/gnome-terminal/global/default_profile string=base-16-monokai-dark
 
 # Set bool value
-- gconftool-2: key=/apps/gnome-terminal/profiles/base-16-monokai-dark/use_system_font value=false type=bool
+- gconftool-2: key=/apps/gnome-terminal/profiles/base-16-monokai-dark/use_system_font bool=false
 '''
 
 # ===========================================
 # Module code.
 #
 
+
 def _set_value(module, key, value, argument_type):
     ''' Set value of setting, under `key`, using gconftool-2 to `value` of type `argument_type`'''
-    return module.run_command(" ".join([ '/usr/bin/gconftool-2 --set --type {} {} "{}"'.format(argument_type, key, value)]))
+    return module.run_command(" ".join(['/usr/bin/gconftool-2 --set --type {} {} "{}"'.format(argument_type, key, value)]))
+
 
 def _get_value(module, key):
     ''' Return value of setting, under `key`, from gconftool-2'''
     return module.run_command('gconftool-2 --get {}'.format(key))[1].strip()
 
+
 def main():
 
     module = AnsibleModule(
-        argument_spec = {
-            'type': { 'choices': ['string', 'bool', 'integer'], 'required': True },
-            'key': { 'required': True },
-            'value': { 'required': True },
+        argument_spec={
+            'key': {'required': True},
+            'bool': {'type': 'bool'},
+            'integer': {'type': 'int'},
+            'string': {'type' 'string'},
         },
-        supports_check_mode = True,
+        mutually_exclusive=[['bool', 'string', 'integer']],
+        required_one_of=[['bool', 'string', 'integer']],
+        supports_check_mode=True,
     )
 
-    params = module.params
-    argument_type = module.params['type']
-    key = module.params['key']
-    value = module.params['value']
+    key = module.params.get('key')
+    boolean_value = module.params.get('bool')
+    string_value = module.params.get('string')
+    integer_value = module.params.get('integer')
 
     old_value = _get_value(module, key)
 
-    if argument_type == 'bool':
-        if value in ['1', 'true', 1]:
+    if boolean_value is not None:
+        argument_type = 'bool'
+        if value in BOOLEANS_TRUE:
             value = 'true'
-        elif value in ['0', 'false', 0]:
+        elif value in BOOLEANS_FALSE:
             value = 'false'
         else:
-            module.fail_json(msg="type is `bool` and value is not a boolean")
+            module.fail_json(msg="`bool` is not a boolean value")
 
-        if old_value in ['1', 'true', 1]:
+        if old_value in BOOLEANS_TRUE:
             old_value = 'true'
-        elif old_value in ['0', 'false', 0]:
+        elif old_value in BOOLEANS_FALSE:
             old_value = 'false'
-    elif argument_type == 'integer':
-        # try to convert to integer and fail if it's not valid.
+    elif integer_value is not None:
+        argument_type = 'integer'
+        try:
+            value = int(integer_value)
+        except Exception:
+            module.fail_json(msg="`integer` is not an intger value")
         pass
+    else:
+        argument_type = 'string'
+        value = string_value
 
     changed = old_value != value
 

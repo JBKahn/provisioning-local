@@ -19,7 +19,7 @@
   sudo: yes
 
 - name: install source-code-pro - set system font
-  gconftool: key=/apps/gnome-terminal/profiles/Default/font value="Source Code Pro Semi-Bold 12"
+  gconftool-2: key=/apps/gnome-terminal/profiles/Default/font value="Source Code Pro Semi-Bold 12"
 
 - name: install source-code-pro - dont use default system font in terminal
-  gconftool: key=/apps/gnome-terminal/profiles/Default/use_system_font value=false type=bool
+  gconftool-2: key=/apps/gnome-terminal/profiles/Default/use_system_font value=false type=bool
