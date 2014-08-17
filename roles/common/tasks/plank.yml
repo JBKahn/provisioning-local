@@ -14,4 +14,4 @@
   copy: src=plank.desktop dest=/home/{{ username }}/.config/autostart/plank.desktop mode=0755
 
 - name: gnome-terminal launcher-hide-mode
-  command: dconf write /org/compiz/profiles/unity/plugins/unityshell/launcher-hide-mode 1
+  dconf: key=/org/compiz/profiles/unity/plugins/unityshell/launcher-hide-mode int=1
