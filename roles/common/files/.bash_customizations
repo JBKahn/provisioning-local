@@ -21,3 +21,5 @@ source $HOME/.django_bash_completion.sh
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/virtualenvProject
 source /usr/local/bin/virtualenvwrapper.sh
+
+alias tmux='tmux -2'

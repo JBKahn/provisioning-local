@@ -13,10 +13,12 @@
 
 - name: install source-code-pro - copy fonts
   copy: src=/home/{{ username }}/setup/adobe_font/SourceCodePro_FontsOnly-1.017/OTF/ dest=/home/{{ username }}/.fonts mode=0755
+  register: fonts_copied
 
 - name: install source-code-pro - font cache
   command: fc-cache -f -v
   sudo: yes
+  when: fonts_copied|changed
 
 - name: install source-code-pro - set system font
   gconftool-2: key=/apps/gnome-terminal/profiles/Default/font string="Source Code Pro Semi-Bold 12"

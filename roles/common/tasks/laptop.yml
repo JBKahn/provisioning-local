@@ -2,13 +2,15 @@
 - name: screen dimming - alter grub file
   lineinfile: dest=/etc/default/grub regexp=^GRUB_CMDLINE_LINUX_DEFAULT= line='GRUB_CMDLINE_LINUX_DEFAULT="quiet splash video.use_native_backlight=1"'
   sudo: yes
+  register: grubfile
 
 - name: screen dimming - update grub
   command: sudo update-grub
   sudo: yes
+  when: grubfile|changed
 
 - name: keyboard colors - requirements
-  apt: pkg=$item state=installed
+  apt: pkg={{ item }} state=installed
   with_items:
     - build-essential
     - linux-source
@@ -26,12 +28,18 @@
   args:
     chdir: /home/{{ username }}/setup/clevo-wmi-code
 
+- name: keyboard colors - link clevo-wmi to kernel check
+  command: cat /etc/modules
+  sudo: yes
+  register: running_modules
+
 - name: keyboard colors - link clevo-wmi to kernel
   command: sudo insmod /home/{{ username }}/setup/clevo-wmi-code/clevo_wmi.ko
   sudo: yes
+  when: running_modules.stdout.find('clevo_wmi') == -1
 
 - name: keyboard colors - copy to kernel drivers
-  copy: src=/home/{{ username }}/setup/clevo-wmi-code/clevo_wmi.ko dest=/lib/modules/`uname -r`/kernel/drivers/platform/x86/
+  copy: src=/home/{{ username }}/setup/clevo-wmi-code/clevo_wmi.ko dest='/lib/modules/`uname -r`/kernel/drivers/platform/x86/'
   sudo: yes
 
 - name: keyboard colors - handle dependencies
