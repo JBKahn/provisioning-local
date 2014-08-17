@@ -16,7 +16,7 @@
   sudo: yes
 
 - name: install numix theme - set icons to circle
-  command: gsettings set org.gnome.desktop.interface icon-theme Numix-Circle
+  gsettings: schema=org.gnome.desktop.interface key=icon-theme string=Numix-Circle
 
 - name: install numix theme - set gtk theme to Numix
-  command: gsettings set org.gnome.desktop.interface gtk-theme Numix
+  gsettings: schema=org.gnome.desktop.interface key=gtk-theme string=Numix

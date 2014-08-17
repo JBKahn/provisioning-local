@@ -1,6 +1,6 @@
 ---
 - name: install shutter - gcolor2 - silversearcher-ag - vlc
-  apt: pkg="{{ item }}"  state=installed
+  apt: pkg={{ item }} state=installed
   with_items:
     - shutter
     - gcolor2
@@ -20,7 +20,7 @@
   sudo: true
 
 - name: enable workspaces - two horizontal
-  command: gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ hsize 2
+  gsettings: schema=org.compiz.core:/org/compiz/profiles/unity/plugins/core/ key=hsize int=2
 
 - name: enable workspaces - two vertical
-  command: gsettings set org.compiz.core:/org/compiz/profiles/unity/plugins/core/ vsize 2
+  gsettings: schema=org.compiz.core:/org/compiz/profiles/unity/plugins/core/ key=vsize int=2
