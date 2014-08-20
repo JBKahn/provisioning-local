@@ -39,7 +39,7 @@
   when: running_modules.stdout.find('clevo_wmi') == -1
 
 - name: keyboard colors - copy to kernel drivers
-  copy: src=/home/{{ username }}/setup/clevo-wmi-code/clevo_wmi.ko dest='/lib/modules/`uname -r`/kernel/drivers/platform/x86/'
+  copy: src=/home/{{ username }}/setup/clevo-wmi-code/clevo_wmi.ko dest=/lib/modules/{{ uname_r }}/kernel/drivers/platform/x86/
   sudo: yes
 
 - name: keyboard colors - handle dependencies
