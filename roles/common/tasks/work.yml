@@ -28,16 +28,17 @@
 
 - name: install global nodejs packages
   npm:
-    name: "{{ item }}"
+    name: "{{ item.name }}"
     state: present
     global: yes
+    version: "{{ item.version|default('') }}"
   with_items:
-    - bower
-    - coffee-script
-    - grunt-cli
-    - less
-    - jshint
-    - coffee-jshint
+    - {name: 'bower'}
+    - {name: 'coffee-script', version: '1.7.1'}
+    - {name: 'grunt-cli'}
+    - {name: 'less'}
+    - {name: 'jshint'}
+    - {name: 'coffee-jshint'}
   sudo: yes
 
 - name: install tmuxp
