@@ -1,7 +1,12 @@
 ---
 - name: Make sure that the setup directory exsists
-  file: path=/home/{{ username }}/setup state=directory mode=0755
+  file:
+    path: "/home/{{ username }}/setup"
+    state: directory
+    mode: 0755
 
 - name: Make sure git is installed
-  apt: name=git update_cache=yes
+  apt:
+    name: git
+    update_cache: yes
   sudo: yes

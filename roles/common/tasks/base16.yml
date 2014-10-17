@@ -1,23 +1,34 @@
 ---
 - name: base16 - checkout repo
-  git: repo=https://github.com/chriskempson/base16-gnome-terminal.git
-       dest=/home/{{ username }}/setup/base16-gnome
+  git:
+    repo: https://github.com/chriskempson/base16-gnome-terminal.git
+    dest: "/home/{{ username }}/setup/base16-gnome"
 
 - name: base16 - copy monokai-dark
-  copy: src=/home/{{ username }}/setup/base16-gnome/base16-monokai.dark.sh dest=/home/{{ username }}/base16-monokai.dark.sh mode=0755
+  copy:
+    src: "/home/{{ username }}/setup/base16-gnome/base16-monokai.dark.sh"
+    dest: "/home/{{ username }}/base16-monokai.dark.sh"
+    mode: 0755
 
 - name: base16 - install monokai dark
-  command: /home/{{ username }}/base16-monokai.dark.sh
+  command: "/home/{{ username }}/base16-monokai.dark.sh"
 
 - name: base16 - set system font to source code pro
-  gconftool-2: key=/apps/gnome-terminal/profiles/base-16-monokai-dark/font string="Source Code Pro Semi-Bold 12"
+  gconftool-2:
+    key: /apps/gnome-terminal/profiles/base-16-monokai-dark/font
+    string: "Source Code Pro Semi-Bold 12"
 
 - name: base16 - dont use default system font in terminal
-  gconftool-2: key=/apps/gnome-terminal/profiles/base-16-monokai-dark/use_system_font bool=false
+  gconftool-2:
+    key: /apps/gnome-terminal/profiles/base-16-monokai-dark/use_system_font
+    bool: false
 
 - name: base16 - set default terminal profile
-  gconftool-2: key=/apps/gnome-terminal/global/default_profile string=base-16-monokai-dark
+  gconftool-2:
+    key: /apps/gnome-terminal/global/default_profile
+    string: "base-16-monokai-dark"
 
 - name: base-16 - get base16-shell so that colors show up correctly in vim
-  git: repo=https://github.com/chriskempson/base16-shell-terminal.git
-     dest=/home/{{ username }}/.config/base16-shell
+  git:
+    repo: https://github.com/chriskempson/base16-shell.git
+    dest: "/home/{{ username }}/.config/base16-shell"

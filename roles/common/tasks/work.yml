@@ -1,20 +1,38 @@
 ---
 - name: download vagrant .deb package
-  get_url: url={{ vagrant_url }} dest=/home/{{ username }}/setup/vagrant.deb mode=0755
+  get_url:
+    url: "{{ vagrant_url }}"
+    dest: "/home/{{ username }}/setup/vagrant.deb"
+    mode: 0755
+
+- name: get currently installed vagrant version
+  command: "vagrant --version"
+  sudo: yes
+  register: result
+  ignore_errors: True
 
 - name: install vagrant
-  apt: deb=/home/{{ username }}/setup/vagrant.deb
+  apt:
+    deb: "/home/{{ username }}/setup/vagrant.deb"
   sudo: yes
+  when: result.rc !=0 or result.stderr.find('A later version is already installed') != -1
 
 - name: download virtualbox .deb package
-  get_url: url={{ virtualbox_url }} dest=/home/{{ username }}/setup/virtualbox.deb mode=0755
+  get_url:
+    url: "{{ virtualbox_url }}"
+    dest: "/home/{{ username }}/setup/virtualbox.deb"
+    mode: 0755
 
 - name: install virtualbox
-  apt: deb=/home/{{ username }}/setup/virtualbox.deb
+  apt:
+    deb: "/home/{{ username }}/setup/virtualbox.deb"
   sudo: yes
 
 - name: install wave dependencies
-  apt: name="{{ item }}" state=installed update_cache=yes
+  apt:
+    name: "{{ item }}"
+    state: installed
+    update_cache: yes
   with_items:
     - python-pip
     - curl
@@ -24,7 +42,62 @@
     - rpcbind
     - tmux
     - npm
+    - libjpeg-dev
+    - libfreetype6-dev
+    - zlib1g-dev
+    - libpng12-dev
+    - python-dev
+    - libpq-dev
+    - python-dev
   sudo: yes
+
+- name: get currently installed node version
+  command: "node --version"
+  sudo: yes
+  register: result
+  ignore_errors: True
+  tags: nodejs
+
+- name: make temp node folder
+  file:
+    path: /setup/node
+    state: directory
+    mode: 777
+  sudo: yes
+  tags: nodejs
+
+- name: checkout node
+  git:
+    repo: "git://github.com/ry/node.git"
+    dest: "/setup/node"
+    force: no
+    accept_hostkey: yes
+  when: result.rc !=0
+  tags: nodejs
+
+- name: configure
+  sudo: yes
+  command: "./configure"
+  args:
+    chdir: /setup/node
+  when: result.rc !=0
+  tags: nodejs
+
+- name: make
+  command: "make"
+  sudo: yes
+  args:
+    chdir: /setup/node
+  when: result.rc !=0
+  tags: nodejs
+
+- name: make install
+  command: "make install"
+  sudo: yes
+  args:
+    chdir: /setup/node
+  when: result.rc !=0
+  tags: nodejs
 
 - name: install global nodejs packages
   npm:
@@ -42,12 +115,17 @@
   sudo: yes
 
 - name: install tmuxp
-  pip: name=tmuxp
+  pip:
+    name: tmuxp
   sudo: yes
 
 - name: copy tmuxp config
-  copy: src=.tmux.conf dest=/home/{{ username }}/.tmux.conf mode=0755
+  copy:
+    src: .tmux.conf
+    dest: "/home/{{ username }}/.tmux.conf"
+    mode: 0755
 
 - name: install ipython
-  pip: name=ipython
+  pip:
+    name: ipython
   sudo: yes

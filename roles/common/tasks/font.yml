@@ -1,18 +1,30 @@
 ---
 - name: install source-code-pro - make temp dir
-  action: file path=/home/{{ username }}/setup/adobe_font state=directory
+  file:
+    path: "/home/{{ username }}/setup/adobe_font"
+    state: directory
 
 - name: install source-code-pro - download font
-  get_url: url=http://downloads.sourceforge.net/project/sourcecodepro.adobe/SourceCodePro_FontsOnly-1.017.zip dest=/home/{{ username }}/setup/adobe_font/source_code_pro.zip mode=0755
+  get_url:
+    url: http://downloads.sourceforge.net/project/sourcecodepro.adobe/SourceCodePro_FontsOnly-1.017.zip
+    dest: "/home/{{ username }}/setup/adobe_font/source_code_pro.zip"
+    mode: 0755
 
 - name: install source-code-pro - unzip downloaded font
-  unarchive: src=/home/{{ username }}/setup/adobe_font/source_code_pro.zip dest=/home/{{ username }}/setup/adobe_font
+  unarchive:
+    src: "/home/{{ username }}/setup/adobe_font/source_code_pro.zip"
+    dest: "/home/{{ username }}/setup/adobe_font"
 
 - name: install source-code-pro - make fonts directory
-  action: file path=/home/{{ username }}/.fonts state=directory
+  file:
+    path: "/home/{{ username }}/.fonts"
+    state: directory
 
 - name: install source-code-pro - copy fonts
-  copy: src=/home/{{ username }}/setup/adobe_font/SourceCodePro_FontsOnly-1.017/OTF/ dest=/home/{{ username }}/.fonts mode=0755
+  copy:
+    src: "/home/{{ username }}/setup/adobe_font/SourceCodePro_FontsOnly-1.017/OTF/"
+    dest: "/home/{{ username }}/.fonts"
+    mode: 0755
   register: fonts_copied
 
 - name: install source-code-pro - font cache
@@ -21,7 +33,11 @@
   when: fonts_copied|changed
 
 - name: install source-code-pro - set system font
-  gconftool-2: key=/apps/gnome-terminal/profiles/Default/font string="Source Code Pro Semi-Bold 12"
+  gconftool-2:
+    key: /apps/gnome-terminal/profiles/Default/font
+    string: "Source Code Pro Semi-Bold 12"
 
 - name: install source-code-pro - dont use default system font in terminal
-  gconftool-2: key=/apps/gnome-terminal/profiles/Default/use_system_font bool=false
+  gconftool-2:
+    key: /apps/gnome-terminal/profiles/Default/use_system_font
+    bool: false

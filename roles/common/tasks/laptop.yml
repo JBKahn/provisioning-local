@@ -1,55 +1,83 @@
 ---
 - name: screen dimming - alter grub file
-  lineinfile: dest=/etc/default/grub regexp=^GRUB_CMDLINE_LINUX_DEFAULT= line='GRUB_CMDLINE_LINUX_DEFAULT="quiet splash video.use_native_backlight=1"'
+  lineinfile:
+    dest: /etc/default/grub
+    regexp: "^GRUB_CMDLINE_LINUX_DEFAULT="
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash video.use_native_backlight=1"'
   sudo: yes
   register: grubfile
+  tags: sager
 
 - name: screen dimming - update grub
   command: sudo update-grub
   sudo: yes
   when: grubfile|changed
+  tags: sager
 
 - name: keyboard colors - requirements
-  apt: pkg={{ item }} state=installed
+  apt:
+    pkg: "{{ item }}"
+    state: installed
   with_items:
     - build-essential
     - linux-source
   sudo: yes
+  tags: sager
 
 - name: keyboard colors - Make sure setup directory exists
-  action: file path=/home/{{ username }}/setup state=directory
+  file:
+    path: "/home/{{ username }}/setup"
+    state: directory
+  tags: sager
 
 - name: keyboard colors - checkout clevo-wmi-code
-  git: repo=git://git.code.sf.net/p/clevo-wmi/code
-       dest=/home/{{ username }}/setup/clevo-wmi-code
-       accept_hostkey=yes
+  git:
+    repo: git://git.code.sf.net/p/clevo-wmi/code
+    dest: "/home/{{ username }}/setup/clevo-wmi-code"
+    accept_hostkey: yes
+  tags: sager
 
 - name: keyboard colors - build clevo-wmi
   command: make
   args:
-    chdir: /home/{{ username }}/setup/clevo-wmi-code
+    chdir: "/home/{{ username }}/setup/clevo-wmi-code"
+  tags: sager
 
 - name: keyboard colors - link clevo-wmi to kernel check
   command: cat /etc/modules
   sudo: yes
   register: running_modules
+  tags: sager
 
 - name: keyboard colors - link clevo-wmi to kernel
-  command: sudo insmod /home/{{ username }}/setup/clevo-wmi-code/clevo_wmi.ko
+  command: "sudo insmod /home/{{ username }}/setup/clevo-wmi-code/clevo_wmi.ko"
   sudo: yes
-  when: running_modules.stdout.find('clevo_wmi') == -1
+  # when: running_modules.stdout.find('clevo_wmi') == -1
+  tags: sager
+  ignore_errors: True
 
 - name: keyboard colors - copy to kernel drivers
-  copy: src=/home/{{ username }}/setup/clevo-wmi-code/clevo_wmi.ko dest=/lib/modules/{{ uname_r }}/kernel/drivers/platform/x86/
+  copy:
+    src: "/home/{{ username }}/setup/clevo-wmi-code/clevo_wmi.ko"
+    dest: "/lib/modules/{{ uname_r }}/kernel/drivers/platform/x86/"
   sudo: yes
+  tags: sager
 
 - name: keyboard colors - handle dependencies
   command: sudo depmod -a
   sudo: yes
+  tags: sager
 
 - name: keyboard colors- add to etc/modules
-  lineinfile: dest=/etc/modules line=clevo_wmi
+  lineinfile:
+    dest: /etc/modules
+    line: clevo_wmi
   sudo: yes
+  tags: sager
 
 - name: keyboard colors - copy kbbl script
-  copy: src=keyboard-color.sh dest=/home/{{ username }}/keyboard-color.sh mode=0755
+  copy:
+    src: keyboard-color.sh
+    dest: "/home/{{ username }}/keyboard-color.sh"
+    mode: 0755
+  tags: sager

@@ -1,10 +1,16 @@
 ---
 - name: install bumblebee - add bumblebee ppa
-  apt_repository: repo='ppa:bumblebee/stable' state=present update_cache=yes
+  apt_repository:
+    repo: 'ppa:bumblebee/stable'
+    state: present
+    update_cache: yes
   sudo: yes
 
 - name: install bumblebee
-  apt: name="{{ item }}" state=installed update_cache=yes
+  apt:
+    name: "{{ item }}"
+    state: installed
+    update_cache: yes
   with_items:
     - bumblebee
     - bumblebee-nvidia

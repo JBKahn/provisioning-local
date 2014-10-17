@@ -1,6 +1,8 @@
 ---
 - name: install shutter - gcolor2 - silversearcher-ag - vlc
-  apt: pkg={{ item }} state=installed
+  apt:
+    pkg: "{{ item }}"
+    state: installed
   with_items:
     - shutter
     - gcolor2
@@ -9,18 +11,28 @@
   sudo: yes
 
 - name: install virtualenvwrapper
-  pip: name=virtualenvwrapper
+  pip:
+    name: virtualenvwrapper
   sudo: yes
 
 - name: download fixubuntu
-  get_url: url=https://fixubuntu.com/fixubuntu.sh dest=/home/{{ username }}/setup/fixubuntu.sh mode=0755
+  get_url:
+    url: https://fixubuntu.com/fixubuntu.sh
+    dest: "/home/{{ username }}/setup/fixubuntu.sh"
+    mode: 0755
 
 - name: run fixubuntu
-  command: /home/{{ username }}/setup/fixubuntu.sh
+  command: "/home/{{ username }}/setup/fixubuntu.sh"
   sudo: true
 
 - name: enable workspaces - two horizontal
-  gsettings: schema=org.compiz.core:/org/compiz/profiles/unity/plugins/core/ key=hsize int=2
+  gsettings:
+    schema: org.compiz.core:/org/compiz/profiles/unity/plugins/core/
+    key: hsize
+    int: 2
 
 - name: enable workspaces - two vertical
-  gsettings: schema=org.compiz.core:/org/compiz/profiles/unity/plugins/core/ key=vsize int=2
+  gsettings:
+    schema: org.compiz.core:/org/compiz/profiles/unity/plugins/core/
+    key: vsize
+    int: 2
