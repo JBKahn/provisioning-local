@@ -22,4 +22,47 @@ export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/virtualenvProject
 source /usr/local/bin/virtualenvwrapper.sh
 
+if [ "$color_prompt" = yes ]; then
+    # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    # PS1='\[\033[0;32m\]┌ \[\033[0m\033[0;32m\]\u\[\033[0m\] @ \[\033[0;36m\]\h\[\033[0m\033[0;32m\] ─ \[\033[0m\]\t \d\[\033[0;32m\] ─ \[\033[0;31m\]\w\[\033[0;32m\] \[$(__git_ps1)\]\n\[\033[0;32m\]└▶ \[\033[0m\033[0;32m\]\$\[\033[0m\] '
+    # PS1='\[\033[0;32m\]┌┼─┼─ \[\033[0m\033[0;32m\]\u\[\033[0m\] @ \[\033[0;36m\]\h\[\033[0m\033[0;32m\] ─┤├─ \[\033[0m\]\t \d\[\033[0;32m\] ─┤├─ \[\033[0;31m\]\w\[\033[0;32m\] ─┤\[$(__git_ps1)\]\n\[\033[0;32m\]└┼─\[\033[0m\033[0;32m\]\$─┤▶\[\033[0m\] '
+    PS1='\[\033[0;34m\]┌ \[\033[0;36m\]\u\[\033[0;31m\] @ \[\033[0;34m\]\h\[\033[0;34m\] ─ \[\033[0;35m\]\t \d\[\033[0;34m\] ─ \[\033[0;31m\]\w\[\033[0;32m\] \[$(__git_ps1)\]\n\[\033[0;34m\]└▶ \[\033[0;37m\]$ \[\033[0m\]'
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+
 alias tmux='tmux -2'
+
+get_crtime() {
+
+    for target in "${@}"; do
+        inode=$(ls -di "${target}" | cut -d ' ' -f 1)
+        fs=$(df  --output=source "${target}"  | tail -1)
+        crtime=$(sudo debugfs -R 'stat <'"${inode}"'>' "${fs}" 2>/dev/null | 
+        grep -oP 'crtime.*--\s*\K.*')
+        printf "%s\t%s\n" "${target}" "${crtime}"
+    done
+}
+
+# Base16 Shell
+BASE16_SCHEME="monokai"
+BASE16_SHELL="$HOME/.config/base16-shell/base16-$BASE16_SCHEME.dark.sh"
+[[ -s $BASE16_SHELL ]] && . $BASE16_SHELL
+
+if [ "$COLORTERM" == "gnome-terminal" ] || [ "$COLORTERM" == "xfce4-terminal" ]
+then
+    TERM=xterm-256color
+    elif [ "$COLORTERM" == "rxvt-xpm" ]
+    then
+        TERM=rxvt-256color
+fi
+
+function pr_for_sha {
+  pr=$(git log --merges --ancestry-path --oneline $1..master | grep 'pull request' | tail -n1 | awk '{print $5}' | cut -c2-)
+  base_url=$(git config --get remote.origin.url |  sed 's/.*\@//' | sed 's/\:/\//' | sed 's/\.git.*//')
+  xdg-open "https://${base_url}/pull/${pr##*/}/"
+}
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
+[ -s "/home/joseph/.scm_breeze/scm_breeze.sh" ] && source "/home/joseph/.scm_breeze/scm_breeze.sh"

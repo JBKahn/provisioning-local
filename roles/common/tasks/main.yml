@@ -11,7 +11,7 @@
   - include: font.yml
   - include: base16.yml
   - include: work.yml
-  - include: scm_breeze.yml
+  - include: ruby_scm_breeze.yml
   - include: vim.yml
   - include: other_requirements.yml
   - include: dropbox.yml

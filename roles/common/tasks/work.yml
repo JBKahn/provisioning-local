@@ -47,3 +47,7 @@
 
 - name: copy tmuxp config
   copy: src=.tmux.conf dest=/home/{{ username }}/.tmux.conf mode=0755
+
+- name: install ipython
+  pip: name=ipython
+  sudo: yes

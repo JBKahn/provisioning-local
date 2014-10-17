@@ -17,3 +17,7 @@
 
 - name: base16 - set default terminal profile
   gconftool-2: key=/apps/gnome-terminal/global/default_profile string=base-16-monokai-dark
+
+- name: base-16 - get base16-shell so that colors show up correctly in vim
+  git: repo=https://github.com/chriskempson/base16-shell-terminal.git
+     dest=/home/{{ username }}/.config/base16-shell
