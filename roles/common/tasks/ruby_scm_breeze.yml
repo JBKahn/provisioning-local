@@ -21,6 +21,10 @@
   sudo: yes
   tags: ruby
 
+- name: add rvm key
+  shell: gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+  sudo: yes
+
 - name: install rvm with ruby
   command: "bash /home/{{ username }}/setup/rvm-install.sh stable --ruby"
   sudo: yes
@@ -45,6 +49,5 @@
     line: '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*'
 
 - name: Install sass gem
-  gem:
-    name: sass
-    state: present
+  shell: /usr/local/rvm/bin/rvm all do gem install sass
+  sudo: yes

@@ -1,2 +1,2 @@
-python-apt==0.9.3.5
-ansible==1.7.1
+python-apt
+ansible==1.8.2

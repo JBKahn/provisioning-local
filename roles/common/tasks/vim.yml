@@ -9,7 +9,7 @@
   file:
     path: "/home/{{ username }}/.vim/bundle"
     state: directory
-    mode: 777
+    mode: 0777
   sudo: yes
 
 - name: horse vim - checkout vundle repo
@@ -40,7 +40,7 @@
   file:
     path: "/home/{{ username }}/.vim/colors"
     state: directory
-    mode: 777
+    mode: 0777
   sudo: yes
 
 - name: horse vim - copy color to config to avoid error

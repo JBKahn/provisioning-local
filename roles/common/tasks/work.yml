@@ -58,14 +58,6 @@
   ignore_errors: True
   tags: nodejs
 
-- name: make temp node folder
-  file:
-    path: /setup/node
-    state: directory
-    mode: 777
-  sudo: yes
-  tags: nodejs
-
 - name: checkout node
   git:
     repo: "git://github.com/ry/node.git"
@@ -74,6 +66,7 @@
     accept_hostkey: yes
   when: result.rc !=0
   tags: nodejs
+  sudo: yes
 
 - name: configure
   sudo: yes
