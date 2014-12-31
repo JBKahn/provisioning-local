@@ -25,11 +25,11 @@ sudo sed -i "s/^uname_r: .*/uname_r: `uname -r`/" roles/common/vars/main.yml
 ansible-playbook setup.yml -i HOSTS --ask-sudo-pass  --module-path ./ansible_modules
 
 # currently unable to use ansible due to EULA that I can't seem to stub using debconf
-# sudo apt-get install steam
+sudo apt-get install steam
 
-# dropbox start -i &
-# /opt/extras.ubuntu.com/variety/bin/variety $
-# plank &
+dropbox start -i > /dev/null 2>&1 &
+/opt/extras.ubuntu.com/variety/bin/variety > /dev/null 2>&1 &
+plank > /dev/null 2>&1 &
 
 source ~/.bashrc
 exit 0
