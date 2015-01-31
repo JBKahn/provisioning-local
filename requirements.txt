@@ -1,2 +1,2 @@
 python-apt
-ansible==1.8.2
+ansible==1.7.1
