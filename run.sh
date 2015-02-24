@@ -14,9 +14,6 @@ cd provisioning-local
 
 sudo pip install -r requirements.txt
 
-echo -e "please enter your username, followed by [ENTER]" && read PROVISIONING_USER
-sudo sed -i "s/^username: .*/username: $PROVISIONING_USER/" roles/common/vars/main.yml
-
 echo -e "please enter your github username, followed by [ENTER]" && read PROVISIONING_GITHUB_USERNAME
 sudo sed -i "s/^github_username: .*/github_username: $PROVISIONING_GITHUB_USERNAME/" roles/common/vars/main.yml
 

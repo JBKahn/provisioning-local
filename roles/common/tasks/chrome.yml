@@ -8,13 +8,13 @@
 - name: install chrome stable - download linux_signing_key.pub
   get_url:
     url: https://dl-ssl.google.com/linux/linux_signing_key.pub
-    dest: "/home/{{ username }}/setup/linux_signing_key.pub"
+    dest: "/home/{{ ansible_env.USER }}/setup/linux_signing_key.pub"
     mode: 0440
 
 - name: install chrome stable - add linux_signing_key.pub to keys
   authorized_key:
-    user: "{{ username }}"
-    key: "{{ lookup('file', '/home/{{ username }}/setup/linux_signing_key.pub') }}"
+    user: "{{ ansible_env.USER }}"
+    key: "{{ lookup('file', '/home/{{ ansible_env.USER }}/setup/linux_signing_key.pub') }}"
 
 - name: install chrome stable - add to google.list
   lineinfile:

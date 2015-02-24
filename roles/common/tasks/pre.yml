@@ -1,7 +1,7 @@
 ---
 - name: Make sure that the setup directory exsists
   file:
-    path: "/home/{{ username }}/setup"
+    path: "/home/{{ ansible_env.USER }}/setup"
     state: directory
     mode: 0755
 

@@ -18,11 +18,11 @@
 - name: download fixubuntu
   get_url:
     url: https://fixubuntu.com/fixubuntu.sh
-    dest: "/home/{{ username }}/setup/fixubuntu.sh"
+    dest: "/home/{{ ansible_env.USER }}/setup/fixubuntu.sh"
     mode: 0755
 
 - name: run fixubuntu
-  command: "/home/{{ username }}/setup/fixubuntu.sh"
+  command: "/home/{{ ansible_env.USER }}/setup/fixubuntu.sh"
   sudo: true
 
 - name: enable workspaces - two horizontal

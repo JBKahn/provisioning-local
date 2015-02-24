@@ -2,7 +2,7 @@
 - name: download vagrant .deb package
   get_url:
     url: "{{ vagrant_url }}"
-    dest: "/home/{{ username }}/setup/vagrant.deb"
+    dest: "/home/{{ ansible_env.USER }}/setup/vagrant.deb"
     mode: 0755
 
 - name: get currently installed vagrant version
@@ -13,19 +13,19 @@
 
 - name: install vagrant
   apt:
-    deb: "/home/{{ username }}/setup/vagrant.deb"
+    deb: "/home/{{ ansible_env.USER }}/setup/vagrant.deb"
   sudo: yes
   when: result.rc !=0 or result.stderr.find('A later version is already installed') != -1
 
 - name: download virtualbox .deb package
   get_url:
     url: "{{ virtualbox_url }}"
-    dest: "/home/{{ username }}/setup/virtualbox.deb"
+    dest: "/home/{{ ansible_env.USER }}/setup/virtualbox.deb"
     mode: 0755
 
 - name: install virtualbox
   apt:
-    deb: "/home/{{ username }}/setup/virtualbox.deb"
+    deb: "/home/{{ ansible_env.USER }}/setup/virtualbox.deb"
   sudo: yes
 
 - name: install wave dependencies
@@ -115,7 +115,7 @@
 - name: copy tmuxp config
   copy:
     src: .tmux.conf
-    dest: "/home/{{ username }}/.tmux.conf"
+    dest: "/home/{{ ansible_env.USER }}/.tmux.conf"
     mode: 0755
 
 - name: install ipython
