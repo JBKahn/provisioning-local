@@ -41,7 +41,7 @@ How To Install The Old Fashioned Way
   sudo pip install -r requirements.txt
   ```
 
-6. Fill in the variables in the [variables file ](./roles/common/vars/main.yml)
+6. Fill in the variables in the [variables file ](./config.json)
 
   | variable  | Description  |
   | :------------ |:---------------|
@@ -52,7 +52,7 @@ How To Install The Old Fashioned Way
 7. Provision your local machine
 
   ```bash
-  ansible-playbook setup.yml -i HOSTS --ask-sudo-pass
+  ansible-playbook setup.yml -i HOSTS --ask-sudo-pass --module-path ./ansible_modules --extra-vars "@config.json"
   ```
 
 Possible Issues
