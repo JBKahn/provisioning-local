@@ -2,10 +2,10 @@
 - name: install scm-breeze - checkout repo
   git:
     repo: https://github.com/ndbroadbent/scm_breeze.git
-    dest: "/home/{{ ansible_env.USER }}/setup/scm_breeze"
+    dest: "{{ ansible_env.HOME }}/setup/scm_breeze"
 
 - name: install scm-breeze - run script
-  command: "/home/{{ ansible_env.USER }}/setup/scm_breeze/install.sh"
+  command: "{{ ansible_env.HOME }}/setup/scm_breeze/install.sh"
 
 - name: remove ruby
   apt:
@@ -17,7 +17,7 @@
 - name: download rvm installer
   get_url:
     url: https://get.rvm.io
-    dest: "/home/{{ ansible_env.USER }}/setup/rvm-install.sh"
+    dest: "{{ ansible_env.HOME }}/setup/rvm-install.sh"
   sudo: yes
   tags: ruby
 
@@ -26,25 +26,25 @@
   sudo: yes
 
 - name: install rvm with ruby
-  command: "bash /home/{{ ansible_env.USER }}/setup/rvm-install.sh stable --ruby"
+  command: "bash {{ ansible_env.HOME }}/setup/rvm-install.sh stable --ruby"
   sudo: yes
   tags: ruby
 
 - name: remove troublesome rvm line from .bashrc
   lineinfile:
-    dest: "/home/{{ ansible_env.USER }}/.bashrc"
+    dest: "{{ ansible_env.HOME }}/.bashrc"
     state: absent
     regexp: '"$PATH:$HOME/.rvm/bin"'
 
 - name: remove troublesome scm_breeze line from .bashrc
   lineinfile:
-    dest: "/home/{{ ansible_env.USER }}/.bashrc"
+    dest: "{{ ansible_env.HOME }}/.bashrc"
     state: absent
     regexp: '"/home/joseph/.scm_breeze/scm_breeze.sh"'
 
 - name: add rvm line to profile
   lineinfile:
-    dest: "/home/{{ ansible_env.USER }}/.bashrc"
+    dest: "{{ ansible_env.HOME }}/.bashrc"
     state: present
     line: '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*'
 

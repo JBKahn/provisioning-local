@@ -15,16 +15,16 @@
 - name: install variety - Make variety autostart
   copy:
     src: variety.desktop
-    dest: "/home/{{ ansible_env.USER }}/.config/autostart/variety.desktop"
+    dest: "{{ ansible_env.HOME }}/.config/autostart/variety.desktop"
     mode: 0755
 
 - name: install variety - make sure the varienty config directory exists
   file:
-    path: "/home/{{ ansible_env.USER }}/.config/variety"
+    path: "{{ ansible_env.HOME }}/.config/variety"
     state: directory
 
 - name: install variety - Set variety config
   copy:
     src: variety.conf
-    dest: "/home/{{ ansible_env.USER }}/.config/variety/variety.conf"
+    dest: "{{ ansible_env.HOME }}/.config/variety/variety.conf"
     mode: 0755

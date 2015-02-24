@@ -7,7 +7,7 @@
 
 - name: horse vim - make sure bundle directory exists
   file:
-    path: "/home/{{ ansible_env.USER }}/.vim/bundle"
+    path: "{{ ansible_env.HOME }}/.vim/bundle"
     state: directory
     mode: 0777
   sudo: yes
@@ -15,30 +15,30 @@
 - name: horse vim - checkout vundle repo
   git:
     repo: https://github.com/gmarik/vundle.vim.git
-    dest: "/home/{{ ansible_env.USER }}/.vim/bundle/vundle"
+    dest: "{{ ansible_env.HOME }}/.vim/bundle/vundle"
 
 - name: horse vim - checkout repo
   git:
     repo: https://github.com/JBKahn/horse.vim.git
-    dest: "/home/{{ ansible_env.USER }}/horse.vim"
+    dest: "{{ ansible_env.HOME }}/horse.vim"
 
 - name: horse vim - copy .vimrc file
   file:
-    src: "/home/{{ ansible_env.USER }}/horse.vim/.vimrc"
-    dest: "/home/{{ ansible_env.USER }}/.vimrc"
+    src: "{{ ansible_env.HOME }}/horse.vim/.vimrc"
+    dest: "{{ ansible_env.HOME }}/.vimrc"
     mode: 0755
     state: link
 
 - name: horse vim - copy .vimrc.bundles file
   file:
-    src: "/home/{{ ansible_env.USER }}/horse.vim/.vimrc.bundles"
-    dest: "/home/{{ ansible_env.USER }}/.vimrc.bundles"
+    src: "{{ ansible_env.HOME }}/horse.vim/.vimrc.bundles"
+    dest: "{{ ansible_env.HOME }}/.vimrc.bundles"
     mode: 0755
     state: link
 
 - name: horse vim - make sure vim colors directory exists
   file:
-    path: "/home/{{ ansible_env.USER }}/.vim/colors"
+    path: "{{ ansible_env.HOME }}/.vim/colors"
     state: directory
     mode: 0777
   sudo: yes
@@ -46,7 +46,7 @@
 - name: horse vim - copy color to config to avoid error
   copy:
     src: base16-monokai.vim
-    dest: "/home/{{ ansible_env.USER }}/.vim/colors/base16-monokai.vim"
+    dest: "{{ ansible_env.HOME }}/.vim/colors/base16-monokai.vim"
     mode: 0755
 
 - name: horse vim - run bundle install
@@ -67,14 +67,14 @@
 
 - name: horse vim - symlink nvimrc
   file:
-    src: "/home/{{ ansible_env.USER }}/horse.vim/.vimrc"
-    dest: "/home/{{ ansible_env.USER }}/.nvimrc"
+    src: "{{ ansible_env.HOME }}/horse.vim/.vimrc"
+    dest: "{{ ansible_env.HOME }}/.nvimrc"
     mode: 0755
     state: link
 
 - name: horse vim - symlink nvim
   file:
-    src: "/home/{{ ansible_env.USER }}/.vim"
-    dest: "/home/{{ ansible_env.USER }}/.nvim"
+    src: "{{ ansible_env.HOME }}/.vim"
+    dest: "{{ ansible_env.HOME }}/.nvim"
     mode: 0755
     state: link
