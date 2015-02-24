@@ -5,16 +5,11 @@
     update_cache: yes
   sudo: yes
 
-- name: install chrome stable - download linux_signing_key.pub
-  get_url:
+- name: add google repo key
+  apt_key:
     url: https://dl-ssl.google.com/linux/linux_signing_key.pub
-    dest: "{{ ansible_env.HOME }}/setup/linux_signing_key.pub"
-    mode: 0440
-
-- name: install chrome stable - add linux_signing_key.pub to keys
-  authorized_key:
-    user: "{{ ansible_env.USER }}"
-    key: "{{ lookup('file', '{{ ansible_env.HOME }}/setup/linux_signing_key.pub') }}"
+    state: present
+  sudo: yes
 
 - name: install chrome stable - add to google.list
   lineinfile:
