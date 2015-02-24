@@ -1,10 +1,6 @@
-sudo apt-get install python-setuptools
+sudo apt-get install python-setuptools aptitude git python-dev libxml2-dev libxslt-dev
 
 sudo easy_install pip
-
-sudo apt-get install aptitude
-sudo apt-get install git
-sudo apt-get install python-dev libxml2-dev libxslt-dev
 
 cd ~
 mkdir -p setup
