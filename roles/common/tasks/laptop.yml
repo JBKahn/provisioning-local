@@ -26,21 +26,21 @@
 
 - name: keyboard colors - Make sure setup directory exists
   file:
-    path: "/home/{{ username }}/setup"
+    path: "{{ ansible_env.HOME }}/setup"
     state: directory
   tags: sager
 
 - name: keyboard colors - checkout clevo-wmi-code
   git:
     repo: git://git.code.sf.net/p/clevo-wmi/code
-    dest: "/home/{{ username }}/setup/clevo-wmi-code"
+    dest: "{{ ansible_env.HOME }}/setup/clevo-wmi-code"
     accept_hostkey: yes
   tags: sager
 
 - name: keyboard colors - build clevo-wmi
   command: make
   args:
-    chdir: "/home/{{ username }}/setup/clevo-wmi-code"
+    chdir: "{{ ansible_env.HOME }}/setup/clevo-wmi-code"
   tags: sager
 
 - name: keyboard colors - link clevo-wmi to kernel check
@@ -50,7 +50,7 @@
   tags: sager
 
 - name: keyboard colors - link clevo-wmi to kernel
-  command: "sudo insmod /home/{{ username }}/setup/clevo-wmi-code/clevo_wmi.ko"
+  command: "sudo insmod {{ ansible_env.HOME }}/setup/clevo-wmi-code/clevo_wmi.ko"
   sudo: yes
   # when: running_modules.stdout.find('clevo_wmi') == -1
   tags: sager
@@ -58,8 +58,8 @@
 
 - name: keyboard colors - copy to kernel drivers
   copy:
-    src: "/home/{{ username }}/setup/clevo-wmi-code/clevo_wmi.ko"
-    dest: "/lib/modules/{{ uname_r }}/kernel/drivers/platform/x86/"
+    src: "{{ ansible_env.HOME }}/setup/clevo-wmi-code/clevo_wmi.ko"
+    dest: "/lib/modules/{{ ansible_kernel }}/kernel/drivers/platform/x86/"
   sudo: yes
   tags: sager
 
@@ -78,6 +78,6 @@
 - name: keyboard colors - copy kbbl script
   copy:
     src: keyboard-color.sh
-    dest: "/home/{{ username }}/keyboard-color.sh"
+    dest: "{{ ansible_env.HOME }}/keyboard-color.sh"
     mode: 0755
   tags: sager

@@ -2,16 +2,16 @@
 - name: base16 - checkout repo
   git:
     repo: https://github.com/chriskempson/base16-gnome-terminal.git
-    dest: "/home/{{ username }}/setup/base16-gnome"
+    dest: "{{ ansible_env.HOME }}/setup/base16-gnome"
 
 - name: base16 - copy monokai-dark
   copy:
-    src: "/home/{{ username }}/setup/base16-gnome/base16-monokai.dark.sh"
-    dest: "/home/{{ username }}/base16-monokai.dark.sh"
+    src: "{{ ansible_env.HOME }}/setup/base16-gnome/base16-monokai.dark.sh"
+    dest: "{{ ansible_env.HOME }}/base16-monokai.dark.sh"
     mode: 0755
 
 - name: base16 - install monokai dark
-  command: "/home/{{ username }}/base16-monokai.dark.sh"
+  command: "{{ ansible_env.HOME }}/base16-monokai.dark.sh"
 
 - name: base16 - set system font to source code pro
   gconftool-2:
@@ -31,4 +31,4 @@
 - name: base-16 - get base16-shell so that colors show up correctly in vim
   git:
     repo: https://github.com/chriskempson/base16-shell.git
-    dest: "/home/{{ username }}/.config/base16-shell"
+    dest: "{{ ansible_env.HOME }}/.config/base16-shell"

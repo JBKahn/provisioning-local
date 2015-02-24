@@ -41,11 +41,10 @@ How To Install The Old Fashioned Way
   sudo pip install -r requirements.txt
   ```
 
-6. Fill in the variables in the [variables file ](./roles/common/vars/main.yml)
+6. Fill in the variables in the [variables file ](./config.json)
 
   | variable  | Description  |
   | :------------ |:---------------|
-  | username    | username of user you wish to provision for |
   | sager_laptop     | boolean to fix keyboard colors and backlight on ubuntu for sager laptops |
   | vagrant_url | URL to vagrant .deb file you wish to install |
   | virtualbox_url |URL to virtual_box .deb file you wish to install |
@@ -53,7 +52,7 @@ How To Install The Old Fashioned Way
 7. Provision your local machine
 
   ```bash
-  ansible-playbook setup.yml -i HOSTS --ask-sudo-pass
+  ansible-playbook setup.yml -i HOSTS --ask-sudo-pass --module-path ./ansible_modules --extra-vars "@config.json"
   ```
 
 Possible Issues

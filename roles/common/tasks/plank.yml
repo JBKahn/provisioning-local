@@ -14,13 +14,13 @@
 
 - name: install plank - Make sure that the autostart directory exsists
   file:
-    path: "/home/{{ username }}/.config/autostart"
+    path: "{{ ansible_env.HOME }}/.config/autostart"
     state: directory
 
 - name: install plank - Make Plank autostart
   copy:
     src: plank.desktop
-    dest: "/home/{{ username }}/.config/autostart/plank.desktop"
+    dest: "{{ ansible_env.HOME }}/.config/autostart/plank.desktop"
     mode: 0755
 
 - name: gnome-terminal launcher-hide-mode

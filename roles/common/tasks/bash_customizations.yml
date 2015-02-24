@@ -1,28 +1,28 @@
 ---
 - name: bash customizations - force color prompt
   lineinfile:
-    dest: /home/{{ username }}/.bashrc
+    dest: "{{ ansible_env.HOME }}/.bashrc"
     regexp: "force_color_prompt="
     line: "force_color_prompt=yes"
 
 - name: bash customizations - download django bash completion
   get_url:
     url: https://raw.githubusercontent.com/django/django/master/extras/django_bash_completion
-    dest: "/home/{{ username }}/.django_bash_completion.sh"
+    dest: "{{ ansible_env.HOME }}/.django_bash_completion.sh"
     mode: 0755
 
 - name: bash customizations - copy .bash_customizations file
   copy:
     src: .bash_customizations
-    dest: "/home/{{ username }}/.bash_customizations"
+    dest: "{{ ansible_env.HOME }}/.bash_customizations"
     mode: 0755
 
 - name: bash customizations - run .bash_customizations from .bash_rc
   lineinfile:
-    dest: "/home/{{ username }}/.bashrc"
+    dest: "{{ ansible_env.HOME }}/.bashrc"
     line: "test -f ~/.bash_customizations && source ~/.bash_customizations"
 
 - name: bash customizations - add github username to .bash_customizations
   lineinfile:
-    dest: "/home/{{ username }}/.bash_customizations"
+    dest: "{{ ansible_env.HOME }}/.bash_customizations"
     line: 'export GITHUB_USERNAME="{{ github_username }}"'

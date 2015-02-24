@@ -14,15 +14,9 @@ cd provisioning-local
 
 sudo pip install -r requirements.txt
 
-echo -e "please enter your username, followed by [ENTER]" && read PROVISIONING_USER
-sudo sed -i "s/^username: .*/username: $PROVISIONING_USER/" roles/common/vars/main.yml
+echo -e "please make sure to edit the config.json file followed by [ENTER]" && read USELESS_VAR
 
-echo -e "please enter your github username, followed by [ENTER]" && read PROVISIONING_GITHUB_USERNAME
-sudo sed -i "s/^github_username: .*/github_username: $PROVISIONING_GITHUB_USERNAME/" roles/common/vars/main.yml
-
-sudo sed -i "s/^uname_r: .*/uname_r: `uname -r`/" roles/common/vars/main.yml
-
-ansible-playbook setup.yml -i HOSTS --ask-sudo-pass  --module-path ./ansible_modules
+ansible-playbook setup.yml -i HOSTS --ask-sudo-pass  --module-path ./ansible_modules --extra-vars "@config.json"
 
 # currently unable to use ansible due to EULA that I can't seem to stub using debconf
 sudo apt-get install steam
