@@ -14,6 +14,8 @@ alias pch='.git/hooks/pre-commit'
 alias proot='cd "$(git rev-parse --show-toplevel)"'
 alias kbbl='~/keyboard-color.sh'
 alias waveup='cd ~/waveapps; vagrant up; tmuxp load wavevagrant.json'
+alias wavesuspend='cd ~/waveapps; vagrant suspend; cd ~/waveapps-payments; vagrant suspend'
+alias wavedown='cd ~/waveapps; vagrant halt; cd ~/waveapps-payments; vagrant halt'
 alias djpy='pylint --load-plugins pylint_django'
 
 source $HOME/.django_bash_completion.sh
