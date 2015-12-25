@@ -18,6 +18,7 @@ dropbox start -i > /dev/null 2>&1 &
 /opt/extras.ubuntu.com/variety/bin/variety > /dev/null 2>&1 &
 plank > /dev/null 2>&1 &
 steam > /dev/null 2>&1 &
+emacs > /dev/null 2>&1 &
 
 source ~/.bashrc
 exit 0
