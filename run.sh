@@ -14,12 +14,10 @@ echo -e "please make sure to edit the config.json file followed by [ENTER]" && r
 
 ansible-playbook setup.yml -i HOSTS --ask-sudo-pass  --module-path ./ansible_modules --extra-vars "@config.json"
 
-# currently unable to use ansible due to EULA that I can't seem to stub using debconf
-sudo apt-get install steam
-
 dropbox start -i > /dev/null 2>&1 &
 /opt/extras.ubuntu.com/variety/bin/variety > /dev/null 2>&1 &
 plank > /dev/null 2>&1 &
+steam > /dev/null 2>&1 &
 
 source ~/.bashrc
 exit 0

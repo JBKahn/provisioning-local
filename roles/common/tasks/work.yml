@@ -10,12 +10,13 @@
   sudo: yes
   register: result
   ignore_errors: True
+  always_run: True
 
 - name: install vagrant
   apt:
     deb: "{{ ansible_env.HOME }}/setup/vagrant.deb"
   sudo: yes
-  when: result.rc !=0 or result.stderr.find('A later version is already installed') != -1
+  when: "result.rc !=0 or 'A later version is already installed' in result.stderr"
 
 - name: download virtualbox .deb package
   get_url:
@@ -23,10 +24,18 @@
     dest: "{{ ansible_env.HOME }}/setup/virtualbox.deb"
     mode: 0755
 
+- name: get currently installed virtualbox version
+  command: "vboxmanage --version"
+  sudo: yes
+  register: result
+  ignore_errors: True
+  always_run: True
+
 - name: install virtualbox
   apt:
     deb: "{{ ansible_env.HOME }}/setup/virtualbox.deb"
   sudo: yes
+  when: "result.rc !=0"
 
 - name: install wave dependencies
   apt:
@@ -36,7 +45,6 @@
   with_items:
     - python-pip
     - curl
-    - nodejs
     - nfs-kernel-server
     - nfs-common
     - rpcbind
@@ -51,53 +59,37 @@
     - python-dev
   sudo: yes
 
-- name: get currently installed node version
-  command: "node --version"
-  sudo: yes
-  register: result
-  ignore_errors: True
-  tags: nodejs
-
-- name: checkout node
+- name: download nvm source
   git:
-    repo: "git://github.com/ry/node.git"
-    dest: "/setup/node"
-    force: no
-    accept_hostkey: yes
-  when: result.rc !=0
-  tags: nodejs
-  sudo: yes
-
-- name: configure
-  sudo: yes
-  command: "./configure"
-  args:
-    chdir: /setup/node
-  when: result.rc !=0
+    repo: "https://github.com/creationix/nvm.git"
+    dest: "{{ ansible_env.HOME }}/setup/.nvm"
+    version: v0.26.1
   tags: nodejs
 
-- name: make
-  command: "make"
-  sudo: yes
-  args:
-    chdir: /setup/node
-  when: result.rc !=0
+- name: install node with nvm
+  shell: "source {{ ansible_env.HOME }}/setup/.nvm/nvm.sh && nvm install 5.3.0 && nvm alias default v5.3.0"
   tags: nodejs
 
-- name: make install
-  command: "make install"
-  sudo: yes
-  args:
-    chdir: /setup/node
-  when: result.rc !=0
+- name: download npm installer
+  get_url:
+    url: https://www.npmjs.com/install.sh
+    dest: /tmp/npm-install.sh
+    validate_certs: false
+    owner: vagrant
+    group: vagrant
+  tags: nodejs
+
+- name: install npm
+  command: bash /tmp/npm-install.sh
   tags: nodejs
 
 - name: install global nodejs packages
   npm:
     name: "{{ item.name }}"
+    version: "{{ item.version|default('') }}"
     state: present
     global: yes
-    version: "{{ item.version|default('') }}"
+  tags: nodejs
   with_items:
     - {name: 'bower'}
     - {name: 'coffee-script', version: '1.7.1'}
@@ -105,7 +97,7 @@
     - {name: 'less'}
     - {name: 'jshint'}
     - {name: 'coffee-jshint'}
-  sudo: yes
+    - {name: 'localtunnel'}
 
 - name: install tmuxp
   pip:
