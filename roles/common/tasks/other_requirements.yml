@@ -36,3 +36,26 @@
     schema: org.compiz.core:/org/compiz/profiles/unity/plugins/core/
     key: vsize
     int: 2
+
+- name: download steam
+  get_url:
+    url: https://steamcdn-a.akamaihd.net/client/installer/steam.deb
+    dest: "{{ ansible_env.HOME }}/setup/steam.deb"
+    mode: 0755
+
+- name: accept steams licencing agreement - purge
+  command: 'echo "steam steam/purge note" | sudo debconf-set-selections'
+  sudo: true
+
+- name: accept steams licencing agreement - licence
+  command: 'echo "steam steam/license note" | sudo debconf-set-selections'
+  sudo: true
+
+- name: accept steams licencing agreement - question
+  command: 'echo "steam steam/question select I AGREE" | sudo debconf-set-selections '
+  sudo: true
+
+- name: install steam
+  apt:
+    deb: "{{ ansible_env.HOME }}/setup/steam.deb"
+  sudo: yes

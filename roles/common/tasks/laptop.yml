@@ -32,7 +32,7 @@
 
 - name: keyboard colors - checkout clevo-wmi-code
   git:
-    repo: git://git.code.sf.net/p/clevo-wmi/code
+    repo: https://github.com/thunderbirdtr/clevo_backlit.git
     dest: "{{ ansible_env.HOME }}/setup/clevo-wmi-code"
     accept_hostkey: yes
   tags: sager
@@ -40,7 +40,7 @@
 - name: keyboard colors - build clevo-wmi
   command: make
   args:
-    chdir: "{{ ansible_env.HOME }}/setup/clevo-wmi-code"
+    chdir: "{{ ansible_env.HOME }}/setup/clevo-wmi-code/clevo_wmi-0.0.1"
   tags: sager
 
 - name: keyboard colors - link clevo-wmi to kernel check
@@ -50,7 +50,7 @@
   tags: sager
 
 - name: keyboard colors - link clevo-wmi to kernel
-  command: "sudo insmod {{ ansible_env.HOME }}/setup/clevo-wmi-code/clevo_wmi.ko"
+  command: "sudo insmod {{ ansible_env.HOME }}/setup/clevo-wmi-code/clevo_wmi-0.0.1/clevo_wmi.ko"
   sudo: yes
   # when: running_modules.stdout.find('clevo_wmi') == -1
   tags: sager
@@ -58,7 +58,7 @@
 
 - name: keyboard colors - copy to kernel drivers
   copy:
-    src: "{{ ansible_env.HOME }}/setup/clevo-wmi-code/clevo_wmi.ko"
+    src: "{{ ansible_env.HOME }}/setup/clevo-wmi-code/clevo_wmi-0.0.1/clevo_wmi.ko"
     dest: "/lib/modules/{{ ansible_kernel }}/kernel/drivers/platform/x86/"
   sudo: yes
   tags: sager

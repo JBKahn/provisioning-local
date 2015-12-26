@@ -69,7 +69,7 @@
 
 - name: horse vim - add NeoVim ppa
   apt_repository:
-    repo: 'ppa:rudenko/neovim'
+    repo: 'ppa:neovim-ppa/unstable'
     state: present
     update_cache: yes
   sudo: yes
