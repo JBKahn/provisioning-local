@@ -1,0 +1,51 @@
+---
+- name: download emacs source
+  get_url:
+    url: "{{ emacs_url }}"
+    dest: "{{ ansible_env.HOME }}/setup/emacs.tar.gz"
+    mode: 0755
+
+- name: install source-code-pro - unzip downloaded font
+  unarchive:
+    src: "{{ ansible_env.HOME }}/setup/emacs.tar.gz"
+    dest: "{{ ansible_env.HOME }}/setup/emacs_source"
+
+- name: install spacemacs dependencies
+  apt:
+    name: "build-essential"
+    update_cache: yes
+  sudo: yes
+
+- name: install emacs dependencies
+  apt:
+    name: emacs24
+    update_cache: yes
+    state: "build-dep"
+  sudo: yes
+
+- name: configure
+  command: configure
+  args:
+    chdir: "{{ ansible_env.HOME }}/setup/emacs_source/"
+
+- name: make
+  command: make
+  args:
+    chdir: "{{ ansible_env.HOME }}/setup/emacs_source/"
+
+- name: make install
+  command: make install
+  args:
+    chdir: "{{ ansible_env.HOME }}/setup/emacs_source/"
+  sudo: yes
+
+- name: download spacemacs
+  git:
+    repo: https://github.com/syl20bnr/spacemacs
+    dest: "{{ ansible_env.HOME }}/.emacs.d"
+
+- name: spacemacs config
+  copy:
+    src: .spacemacs
+    dest: "{{ ansible_env.HOME }}/.spacemacs"
+    mode: 0755

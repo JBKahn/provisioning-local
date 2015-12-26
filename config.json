@@ -1,7 +1,9 @@
 {
     "github_username": "JBKahn",
-    "sager_laptop": false,
-    "vagrant_url": "https://dl.bintray.com/mitchellh/vagrant/vagrant_1.7.2_x86_64.deb",
-    "virtualbox_url": "http://download.virtualbox.org/virtualbox/4.3.22/virtualbox-4.3_4.3.22-98236~Ubuntu~raring_amd64.deb",
+    "sager_laptop": true,
+    "vagrant_url": "https://releases.hashicorp.com/vagrant/1.8.1/vagrant_1.8.1_x86_64.deb",
+    "virtualbox_url": "http://download.virtualbox.org/virtualbox/5.0.12/virtualbox-5.0_5.0.12-104815~Ubuntu~wily_amd64.deb",
+    "steam_ulr": "https://steamcdn-a.akamaihd.net/client/installer/steam.deb",
+    "emacs_url": "http://mirror.team-cymru.org/gnu/emacs/emacs-24.4.tar.gz",
     "bumblebee": false
 }
