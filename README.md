@@ -2,7 +2,7 @@
 Provisioning My PC
 ============
 
-A simple ansible script to set up my machine just the way I like it (currently base on Ubuntu 15.10).
+A simple ansible script to set up my machine just the way I like it (currently base on Ubuntu 14.04).
 
 How To Install With One Command
 -------------------------------

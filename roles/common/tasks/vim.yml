@@ -80,10 +80,17 @@
     update_cache: yes
   sudo: yes
 
+- name: horse vim - make sure nvim config directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/nvim"
+    state: directory
+    mode: 0777
+  sudo: yes
+
 - name: horse vim - symlink nvimrc
   file:
     src: "{{ ansible_env.HOME }}/horse.vim/.vimrc"
-    dest: "{{ ansible_env.HOME }}/~/.config/nvim/init.vim"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/init.vim"
     mode: 0755
     state: link
 

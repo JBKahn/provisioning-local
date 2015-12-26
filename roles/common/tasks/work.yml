@@ -81,7 +81,10 @@
   tags: nodejs
 
 - name: install npm
-  command: bash /tmp/npm-install.sh
+  shell: "source {{ ansible_env.HOME }}/setup/.nvm/nvm.sh && source /tmp/npm-install.sh"
+  args:
+    chdir: "{{ ansible_env.HOME }}/setup/.nvm"
+    executable: /bin/bash
   tags: nodejs
 
 - name: install global nodejs packages
