@@ -5,7 +5,14 @@
     dest: "{{ ansible_env.HOME }}/setup/emacs.tar.gz"
     mode: 0755
 
-- name: install source-code-pro - unzip downloaded font
+- name: make sure the emacs source directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/setup/emacs_source"
+    state: directory
+    mode: 0777
+  sudo: yes
+
+- name: unzip emacs source
   unarchive:
     src: "{{ ansible_env.HOME }}/setup/emacs.tar.gz"
     dest: "{{ ansible_env.HOME }}/setup/emacs_source"
@@ -24,19 +31,19 @@
   sudo: yes
 
 - name: configure
-  command: configure
+  command: ./configure
   args:
-    chdir: "{{ ansible_env.HOME }}/setup/emacs_source/"
+    chdir: "{{ ansible_env.HOME }}/setup/emacs_source/emacs-24.4/"
 
 - name: make
   command: make
   args:
-    chdir: "{{ ansible_env.HOME }}/setup/emacs_source/"
+    chdir: "{{ ansible_env.HOME }}/setup/emacs_source/emacs-24.4/"
 
 - name: make install
   command: make install
   args:
-    chdir: "{{ ansible_env.HOME }}/setup/emacs_source/"
+    chdir: "{{ ansible_env.HOME }}/setup/emacs_source/emacs-24.4/"
   sudo: yes
 
 - name: download spacemacs
