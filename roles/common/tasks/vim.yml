@@ -5,17 +5,31 @@
     update_cache: yes
   sudo: yes
 
-- name: horse vim - make sure bundle directory exists
+- name: horse vim - make sure vim automload directory exists
   file:
-    path: "{{ ansible_env.HOME }}/.vim/bundle"
+    path: "{{ ansible_env.HOME }}/.vim/autoload"
     state: directory
     mode: 0777
   sudo: yes
 
-- name: horse vim - checkout vundle repo
-  git:
-    repo: https://github.com/gmarik/vundle.vim.git
-    dest: "{{ ansible_env.HOME }}/.vim/bundle/vundle"
+- name: horse vim - make sure nvim config directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/nvim/site/autoload"
+    state: directory
+    mode: 0777
+  sudo: yes
+
+- name: horse vim - get vim-plug
+  get_url:
+    url: "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+    dest: "{{ ansible_env.HOME }}/.vim/autoload/plug.vim"
+    mode: 0755
+
+- name: horse vim - get vim-plug for neovim
+  get_url:
+    url: "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+    dest: "{{ ansible_env.HOME }}/.local/share/nvim/site/autoload/plug.vim"
+    mode: 0755
 
 - name: horse vim - checkout repo
   git:
@@ -49,8 +63,9 @@
     dest: "{{ ansible_env.HOME }}/.vim/colors/base16-monokai.vim"
     mode: 0755
 
-- name: horse vim - run bundle install
-  command: vim +BundleInstall +qall
+# Commented out since Neovim bug causes it not to close.
+# - name: horse vim - run PlugInstall
+#   command: vim +PlugInstall +qall
 
 - name: horse vim - add NeoVim ppa
   apt_repository:
@@ -68,7 +83,7 @@
 - name: horse vim - symlink nvimrc
   file:
     src: "{{ ansible_env.HOME }}/horse.vim/.vimrc"
-    dest: "{{ ansible_env.HOME }}/.nvimrc"
+    dest: "{{ ansible_env.HOME }}/~/.config/nvim/init.vim"
     mode: 0755
     state: link
 
