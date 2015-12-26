@@ -54,5 +54,5 @@
     line: '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*'
 
 - name: Install sass gem
-  shell: /usr/local/rvm/bin/rvm all do gem install sass
+  shell: "{{ ansible_env.HOME }}/.rvm/bin/rvm all do gem install sass"
   sudo: yes

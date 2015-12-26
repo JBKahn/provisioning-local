@@ -68,6 +68,9 @@
 
 - name: install node with nvm
   shell: "source {{ ansible_env.HOME }}/setup/.nvm/nvm.sh && nvm install 5.3.0 && nvm alias default v5.3.0"
+  args:
+    chdir: "{{ ansible_env.HOME }}/setup/.nvm"
+    executable: /bin/bash
   tags: nodejs
 
 - name: download npm installer
@@ -75,8 +78,6 @@
     url: https://www.npmjs.com/install.sh
     dest: /tmp/npm-install.sh
     validate_certs: false
-    owner: vagrant
-    group: vagrant
   tags: nodejs
 
 - name: install npm
