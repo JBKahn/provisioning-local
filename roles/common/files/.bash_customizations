@@ -61,6 +61,10 @@ function pr_for_sha {
   xdg-open "https://${base_url}/pull/${pr##*/}/"
 }
 
+if [ -f ~/setup/.nvm/nvm.sh ]; then                                         
+  . ~/setup/.nvm/nvm.sh                                                   
+fi 
+
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
 [ -s "/home/joseph/.scm_breeze/scm_breeze.sh" ] && source "/home/joseph/.scm_breeze/scm_breeze.sh"
