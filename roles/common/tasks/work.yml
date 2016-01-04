@@ -49,7 +49,6 @@
     - nfs-common
     - rpcbind
     - tmux
-    - npm
     - libjpeg-dev
     - libfreetype6-dev
     - zlib1g-dev
