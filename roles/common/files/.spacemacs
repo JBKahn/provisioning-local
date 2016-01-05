@@ -60,6 +60,10 @@ before layers configuration."
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
+   ;; my settings
+   dotspacemacs-whitespace-cleanup 'all
+   dotspacemacs-line-numbers 'relative
+   ;;
    ;; Either `vim' or `emacs'. Evil is always enabled but if the variable
    ;; is `emacs' then the `holy-mode' is enabled at startup.
    dotspacemacs-editing-style 'vim
@@ -177,9 +181,8 @@ before layers configuration."
   (add-hook 'after-init-hook #'global-flycheck-mode)
   (setq x-select-enable-clipboard t)
   (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
-  (global-linum-mode 1)
-  (linum-relative-toggle)
   ;; (set-face-background 'hl-line "firebrick4")
+  (spacemacs/toggle-transparent-frame)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
