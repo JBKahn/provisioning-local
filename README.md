@@ -8,7 +8,7 @@ How To Install With One Command
 -------------------------------
 
 ```bash
-wget -qO- https://github.com/JBKahn/provisioning-local/raw/master/run.sh | sudo bash
+wget -qO- https://github.com/JBKahn/provisioning-local/raw/master/run.sh | bash
 ```
 
 
