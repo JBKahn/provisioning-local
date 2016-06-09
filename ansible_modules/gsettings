@@ -70,12 +70,12 @@ EXAMPLES = '''
 
 
 def _set_value(module, schema, key, value):
-    ''' Set value of setting, under `key` in `schema`, using gsettings to `value`.'''
+    """Set value of setting, under `key` in `schema`, using gsettings to `value`."""
     return module.run_command(" ".join(['gsettings set {} {} {}'.format(schema, key, value)]))
 
 
 def _get_value(module, schema, key):
-    ''' Return value of setting, under `key`, from gconftool-2'''
+    """Return value of setting, under `key`, from gsettings."""
     return module.run_command('gsettings get {} {}'.format(schema, key))[1].strip()
 
 

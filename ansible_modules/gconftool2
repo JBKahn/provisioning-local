@@ -23,16 +23,16 @@ from ansible.module_utils.basic import *
 
 DOCUMENTATION = '''
 ---
-module: gconftool-2
+module: gconftool2
 version_added: "post 1.7.1"
 author: Joseph Kahn
-short_description: alter gconftool-2 controlled settings.
+short_description: alter gconftool2 controlled settings.
 description:
-   - Set the value of a gconftool-2 controlled setting using a key and a string, an integer, a boolean, a pair or a list.
+   - Set the value of a gconftool2 controlled setting using a key and a string, an integer, a boolean, a pair or a list.
 options:
   key:
     description:
-      - The key of the gconftool-2 setting to change.
+      - The key of the gconftool2 setting to change.
     required: true
   bool:
     description:
@@ -74,13 +74,13 @@ options:
 
 EXAMPLES = '''
 # Set string value
-- gconftool-2: key=/apps/gnome-terminal/global/default_profile string=base-16-monokai-dark
+- gconftool2: key=/apps/gnome-terminal/global/default_profile string=base-16-monokai-dark
 
 # Set bool value
-- gconftool-2: key=/apps/gnome-terminal/profiles/base-16-monokai-dark/use_system_font bool=false
+- gconftool2: key=/apps/gnome-terminal/profiles/base-16-monokai-dark/use_system_font bool=false
 
 # Set pair value
-- gconftool-2: key=/path/to/something pair-car-type=int pair-cdr-type=string pair=1,'Joseph Kahn'
+- gconftool2: key=/path/to/something pair-car-type=int pair-cdr-type=string pair=1,'Joseph Kahn'
 '''
 
 # ===========================================
@@ -89,13 +89,13 @@ EXAMPLES = '''
 
 
 def _set_value(module, key, value, argument_type, additional_args):
-    ''' Set value of setting, under `key`, using gconftool-2 to `value` of type `argument_type`'''
-    return module.run_command(" ".join(['/usr/bin/gconftool-2 --set --type {} {} "{}" {}'.format(argument_type, key, value, additional_args)]))
+    """Set value of setting, under `key`, using gconftool2 to `value` of type `argument_type`."""
+    return module.run_command(" ".join(['/usr/bin/gconftool2 --set --type {} {} "{}" {}'.format(argument_type, key, value, additional_args)]))
 
 
 def _get_value(module, key):
-    ''' Return value of setting, under `key`, from gconftool-2'''
-    return module.run_command('gconftool-2 --get {}'.format(key))[1].strip()
+    """Return value of setting, under `key`, from gconftool2."""
+    return module.run_command('gconftool2 --get {}'.format(key))[1].strip()
 
 
 def main():

@@ -66,12 +66,12 @@ EXAMPLES = '''
 
 
 def _set_value(module, key, value):
-    ''' Set value of setting, under `key`, using dconf to `value`.'''
+    """Set value of setting, under `key`, using dconf to `value`."""
     return module.run_command(" ".join(['dconf write {} {}'.format(key, value)]))
 
 
 def _get_value(module, key):
-    ''' Return value of setting, under `key`, from gconftool-2'''
+    """Return value of setting, under `key`, from dconf."""
     return module.run_command('dconf read {}'.format(key))[1].strip()
 
 

@@ -33,11 +33,11 @@
   when: fonts_copied|changed
 
 - name: install source-code-pro - set system font
-  gconftool-2:
+  gconftool2:
     key: /apps/gnome-terminal/profiles/Default/font
     string: "Source Code Pro Semi-Bold 12"
 
 - name: install source-code-pro - dont use default system font in terminal
-  gconftool-2:
+  gconftool2:
     key: /apps/gnome-terminal/profiles/Default/use_system_font
     bool: false
