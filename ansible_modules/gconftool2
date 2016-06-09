@@ -26,13 +26,13 @@ DOCUMENTATION = '''
 module: gconftool2
 version_added: "post 1.7.1"
 author: Joseph Kahn
-short_description: alter gconftool2 controlled settings.
+short_description: alter gconftool-2 controlled settings.
 description:
-   - Set the value of a gconftool2 controlled setting using a key and a string, an integer, a boolean, a pair or a list.
+   - Set the value of a gconftool-2 controlled setting using a key and a string, an integer, a boolean, a pair or a list.
 options:
   key:
     description:
-      - The key of the gconftool2 setting to change.
+      - The key of the gconftool-2 setting to change.
     required: true
   bool:
     description:
@@ -90,12 +90,12 @@ EXAMPLES = '''
 
 def _set_value(module, key, value, argument_type, additional_args):
     """Set value of setting, under `key`, using gconftool2 to `value` of type `argument_type`."""
-    return module.run_command(" ".join(['/usr/bin/gconftool2 --set --type {} {} "{}" {}'.format(argument_type, key, value, additional_args)]))
+    return module.run_command(" ".join(['/usr/bin/gconftool-2 --set --type {} {} "{}" {}'.format(argument_type, key, value, additional_args)]))
 
 
 def _get_value(module, key):
     """Return value of setting, under `key`, from gconftool2."""
-    return module.run_command('gconftool2 --get {}'.format(key))[1].strip()
+    return module.run_command('gconftool-2 --get {}'.format(key))[1].strip()
 
 
 def main():
