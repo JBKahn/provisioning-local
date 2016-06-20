@@ -1,12 +1,12 @@
 # sublime text 3
-sudo add-apt-repository ppa:webupd8team/sublime-text-3 
+sudo add-apt-repository ppa:webupd8team/sublime-text-3
 sudo apt-get update && sudo apt-get install sublime-text-installer
 
 # chromium
 sudo apt-get install chromium-browser
 
 # chrome stable
-wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
+wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
 sudo apt-get update && sudo apt-get install google-chrome-stable
 

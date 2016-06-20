@@ -14,17 +14,17 @@
   command: "{{ ansible_env.HOME }}/base16-monokai.dark.sh"
 
 - name: base16 - set system font to source code pro
-  gconftool-2:
+  gconftool2:
     key: /apps/gnome-terminal/profiles/base-16-monokai-dark/font
     string: "Source Code Pro Semi-Bold 12"
 
 - name: base16 - dont use default system font in terminal
-  gconftool-2:
+  gconftool2:
     key: /apps/gnome-terminal/profiles/base-16-monokai-dark/use_system_font
     bool: false
 
 - name: base16 - set default terminal profile
-  gconftool-2:
+  gconftool2:
     key: /apps/gnome-terminal/global/default_profile
     string: "base-16-monokai-dark"
 
